@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html><head><style>
+    .sc-placeholder{background:color-mix(in srgb,currentColor 8%,transparent);
+      border:1px solid color-mix(in srgb,currentColor 50%,transparent);
+      border-radius:2px;box-sizing:border-box;overflow:hidden}
+    @keyframes sc-shine{0%{background-position:100% 50%}100%{background-position:0% 50%}}
+    html.sc-dc-streaming .sc-placeholder,
+    html.sc-dc-streaming .sc-interp.sc-missing{position:relative;
+      background:color-mix(in srgb,currentColor 5%,transparent);
+      border-color:transparent}
+    html.sc-dc-streaming .sc-placeholder::before,
+    html.sc-dc-streaming .sc-interp.sc-missing::before{content:'';
+      position:absolute;inset:0;pointer-events:none;
+      background:linear-gradient(90deg,rgba(217,119,87,0) 25%,rgba(247,225,211,.95) 37%,rgba(217,119,87,0) 63%);
+      background-size:400% 100%;animation:sc-shine 1.4s ease infinite}
+    html.sc-dc-streaming .sc-placeholder:nth-child(n+9 of .sc-placeholder)::before,
+    html.sc-dc-streaming .sc-interp.sc-missing:nth-child(n+9 of .sc-interp.sc-missing)::before{animation:none;
+      background:color-mix(in srgb,currentColor 8%,transparent)}
+    .sc-placeholder-error{padding:4px 8px;font:11px/1.4 ui-monospace,monospace;
+      color:color-mix(in srgb,currentColor 70%,transparent);word-break:break-word}
+    .sc-interp.sc-missing{display:inline-block;width:2em;height:1em;overflow:hidden;
+      vertical-align:text-bottom;background:rgba(255,255,255,.3);border:1px solid rgba(0,0,0,.5);
+      border-radius:2px;box-sizing:border-box;color:transparent;
+      user-select:none}
+    .sc-interp.sc-unresolved{font-family:ui-monospace,monospace;font-size:.85em;
+      color:color-mix(in srgb,currentColor 50%,transparent);
+      background:color-mix(in srgb,currentColor 10%,transparent);border-radius:3px;
+      padding:0 3px}
+    .sc-host.sc-has-error{position:relative}
+    .sc-logic-error{position:absolute;top:8px;left:8px;z-index:2147483647;max-width:60ch;
+      padding:6px 10px;background:#b00020;color:#fff;font:12px/1.4 ui-monospace,monospace;
+      border-radius:4px;white-space:pre-wrap;pointer-events:none}
+    /* Mirrors PRINT_BASELINE_CSS in apps/web deck-stage-export.ts — keep both
+       in sync until dc-runtime regains a build step. */
+    @media print {
+      @page { margin: 0.5cm; }
+      figure, table { break-inside: avoid; }
+      #dc-root, #dc-root > .sc-host { height: auto; }
+      *, *::before, *::after {
+        print-color-adjust: exact; -webkit-print-color-adjust: exact;
+        backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+        animation-delay: -99s !important; animation-duration: .001s !important;
+        animation-iteration-count: 1 !important; animation-fill-mode: both !important;
+        animation-play-state: running !important; transition-duration: 0s !important;
+      }
+    }
+  </style>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><style>
+    .sc-placeholder{background:color-mix(in srgb,currentColor 8%,transparent);
+      border:1px solid color-mix(in srgb,currentColor 50%,transparent);
+      border-radius:2px;box-sizing:border-box;overflow:hidden}
+    @keyframes sc-shine{0%{background-position:100% 50%}100%{background-position:0% 50%}}
+    html.sc-dc-streaming .sc-placeholder,
+    html.sc-dc-streaming .sc-interp.sc-missing{position:relative;
+      background:color-mix(in srgb,currentColor 5%,transparent);
+      border-color:transparent}
+    html.sc-dc-streaming .sc-placeholder::before,
+    html.sc-dc-streaming .sc-interp.sc-missing::before{content:'';
+      position:absolute;inset:0;pointer-events:none;
+      background:linear-gradient(90deg,rgba(217,119,87,0) 25%,rgba(247,225,211,.95) 37%,rgba(217,119,87,0) 63%);
+      background-size:400% 100%;animation:sc-shine 1.4s ease infinite}
+    html.sc-dc-streaming .sc-placeholder:nth-child(n+9 of .sc-placeholder)::before,
+    html.sc-dc-streaming .sc-interp.sc-missing:nth-child(n+9 of .sc-interp.sc-missing)::before{animation:none;
+      background:color-mix(in srgb,currentColor 8%,transparent)}
+    .sc-placeholder-error{padding:4px 8px;font:11px/1.4 ui-monospace,monospace;
+      color:color-mix(in srgb,currentColor 70%,transparent);word-break:break-word}
+    .sc-interp.sc-missing{display:inline-block;width:2em;height:1em;overflow:hidden;
+      vertical-align:text-bottom;background:rgba(255,255,255,.3);border:1px solid rgba(0,0,0,.5);
+      border-radius:2px;box-sizing:border-box;color:transparent;
+      user-select:none}
+    .sc-interp.sc-unresolved{font-family:ui-monospace,monospace;font-size:.85em;
+      color:color-mix(in srgb,currentColor 50%,transparent);
+      background:color-mix(in srgb,currentColor 10%,transparent);border-radius:3px;
+      padding:0 3px}
+    .sc-host.sc-has-error{position:relative}
+    .sc-logic-error{position:absolute;top:8px;left:8px;z-index:2147483647;max-width:60ch;
+      padding:6px 10px;background:#b00020;color:#fff;font:12px/1.4 ui-monospace,monospace;
+      border-radius:4px;white-space:pre-wrap;pointer-events:none}
+    /* Mirrors PRINT_BASELINE_CSS in apps/web deck-stage-export.ts — keep both
+       in sync until dc-runtime regains a build step. */
+    @media print {
+      @page { margin: 0.5cm; }
+      figure, table { break-inside: avoid; }
+      #dc-root, #dc-root > .sc-host { height: auto; }
+      *, *::before, *::after {
+        print-color-adjust: exact; -webkit-print-color-adjust: exact;
+        backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+        animation-delay: -99s !important; animation-duration: .001s !important;
+        animation-iteration-count: 1 !important; animation-fill-mode: both !important;
+        animation-play-state: running !important; transition-duration: 0s !important;
+      }
+    }
+  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="Rei%20da%20Pizza.dc(3)_files/support_R3HT_v0zQ.js"></script><style>x-dc{display:none!important}</style><script src="Rei%20da%20Pizza.dc(3)_files/react.production.min_v0zQ.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous"></script><script src="Rei%20da%20Pizza.dc(3)_files/react-dom.production.min_v0zQ.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous"></script><style>x-dc{display:none!important}</style><script src="Rei%20da%20Pizza.dc(3)_files/react.production.min_R3HT_v0zQ.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous"></script><script src="Rei%20da%20Pizza.dc(3)_files/react-dom.production.min_R3HT_v0zQ.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com/" data-dc-tpl="1"><link href="Rei%20da%20Pizza.dc(3)_files/css2_R3HT_v0zQ.css" rel="stylesheet" data-dc-tpl="2"><style data-dc-tpl="3">
+    @keyframes spin-pizza {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes float-badge {
+      0%, 100% { transform: translateY(0) rotate(-8deg); }
+      50% { transform: translateY(-10px) rotate(-8deg); }
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    @keyframes pulse-ring {
+      0% { box-shadow: 0 0 0 0 rgba(224,168,45,0.55); }
+      70% { box-shadow: 0 0 0 14px rgba(224,168,45,0); }
+      100% { box-shadow: 0 0 0 0 rgba(224,168,45,0); }
+    }
+    body { margin: 0; background: #FFF8EC; }
+    * { box-sizing: border-box; }
+  </style></head>
+<body>
+<div id="dc-root"><div class="sc-host" data-sc-name="Rei da Pizza"><div data-dc-tpl="4" style="font-family: &quot;Poppins&quot;, sans-serif; background: rgb(255, 248, 236); color: rgb(43, 23, 16); overflow-x: hidden;">
+
+  
+  <header data-dc-tpl="5" style="display: flex; align-items: center; justify-content: space-between; padding: 18px 6vw; background: rgb(35, 24, 24); position: sticky; top: 0px; z-index: 50;">
+    <div data-dc-tpl="6" style="display: flex; align-items: center; gap: 12px;">
+      <img data-dc-tpl="7" src="Rei%20da%20Pizza.dc(3)_files/logo_R3HT_v0zQ.png" alt="Rei da Pizza" style="width: 52px; height: 52px; border-radius: 50%; object-fit: cover; box-shadow: rgba(0, 0, 0, 0.35) 0px 2px 10px;">
+      <span data-dc-tpl="8" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 800; font-size: 22px; color: rgb(245, 215, 122); letter-spacing: 0.3px;">Rei da Pizza</span>
+    </div>
+    <nav data-dc-tpl="9" style="display: flex; align-items: center; gap: 32px;">
+      <a data-dc-tpl="10" href="#cardapio" style="color: rgb(255, 248, 236); text-decoration: none; font-weight: 600; font-size: 15px;">Cardápio</a>
+      <a data-dc-tpl="11" href="#comentarios" style="color: rgb(255, 248, 236); text-decoration: none; font-weight: 600; font-size: 15px;">Comentários</a>
+      <a data-dc-tpl="12" href="#contato" style="color: rgb(255, 248, 236); text-decoration: none; font-weight: 600; font-size: 15px;">Contato</a>
+      <a data-dc-tpl="13" href="https://wa.me/5521966281152?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20falar%20com%20o%20Rei%20da%20Pizza." target="_blank" rel="noopener" style="background: rgb(245, 215, 122); color: rgb(90, 16, 16); text-decoration: none; font-weight: 700; font-size: 14px; padding: 10px 20px; border-radius: 999px; box-shadow: rgb(184, 150, 62) 0px 3px 0px;">Peça agora</a>
+    </nav>
+  </header>
+
+  
+  <section data-dc-tpl="14" data-screen-label="Hero" style="position: relative; background: #5A1010; padding: 72px 6vw 0px; display: flex; align-items: center; justify-content: space-between; gap: 40px; min-height: 640px; flex-wrap: wrap;">
+    <div data-dc-tpl="15" style="max-width: 560px; z-index: 2;">
+      <div data-dc-tpl="16" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(245, 215, 122, 0.5); color: rgb(245, 215, 122); font-weight: 600; font-size: 13px; padding: 8px 16px; border-radius: 999px; margin-bottom: 22px;">
+        👑 A pizzaria mais rápida da região
+      </div>
+      <h1 data-dc-tpl="17" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 800; font-size: clamp(38px, 5vw, 64px); line-height: 1.05; color: rgb(255, 248, 236); margin: 0px 0px 22px;">
+        A pizza mais rápida da cidade,<br data-dc-tpl="18">com sabor de <span data-dc-tpl="19" style="color: rgb(245, 215, 122);">rei</span>.
+      </h1>
+      <p data-dc-tpl="20" style="font-size: 18px; line-height: 1.6; color: rgb(251, 228, 208); margin: 0px 0px 34px; max-width: 460px;">
+        Brotinho por R$8 e Família por R$13, em 5 sabores campeões. Peça
+ pelo WhatsApp e receba em até 1 minuto&nbsp;— sem exagero.
+      </p>
+      <div data-dc-tpl="21" style="display: flex; gap: 16px; flex-wrap: wrap;">
+        <a data-dc-tpl="22" href="https://wa.me/5521966281152?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20falar%20com%20o%20Rei%20da%20Pizza." target="_blank" rel="noopener" style="background: rgb(245, 215, 122); color: rgb(90, 16, 16); text-decoration: none; font-weight: 700; font-size: 16px; padding: 16px 30px; border-radius: 999px; box-shadow: rgb(184, 150, 62) 0px 5px 0px;">Chamar no WhatsApp</a>
+        <a data-dc-tpl="23" href="#cardapio" style="background: transparent; color: rgb(255, 248, 236); text-decoration: none; font-weight: 700; font-size: 16px; padding: 16px 30px; border-radius: 999px; border: 2px solid rgba(255, 248, 236, 0.5);">Ver cardápio</a>
+      </div>
+    </div>
+
+    <div data-dc-tpl="24" style="position: relative; width: min(46vw, 480px); display: flex; align-items: center; justify-content: center; z-index: 2;">
+      <div data-dc-tpl="25" style="position: absolute; width: 88%; height: 88%; border-radius: 50%; background: radial-gradient(circle, rgba(245, 215, 122, 0.35) 0%, rgba(245, 215, 122, 0) 70%);"></div>
+      <img data-dc-tpl="26" src="Rei%20da%20Pizza.dc(3)_files/pizza-hero_R3HT_v0zQ.png" alt="Pizza Rei da Pizza" style="width: 100%; max-width: 460px; animation: 14s linear infinite spin-pizza; filter: drop-shadow(rgba(0, 0, 0, 0.45) 0px 25px 40px);">
+      <div data-dc-tpl="27" style="position: absolute; top: 6%; right: 2%; background: rgb(245, 215, 122); color: rgb(90, 16, 16); font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 800; font-size: 15px; text-align: center; width: 108px; height: 108px; border-radius: 50%; display: flex; align-items: center; justify-content: center; line-height: 1.15; border: 3px dashed rgb(90, 16, 16); animation: 3.4s ease-in-out infinite float-badge;">
+        ENTREGA<br data-dc-tpl="28">EM ATÉ<br data-dc-tpl="29">1 MIN
+      </div>
+    </div>
+  </section>
+
+  
+  <div data-dc-tpl="30" style="background: rgb(245, 215, 122); padding: 14px 0px; overflow: hidden; white-space: nowrap; border-top: 3px solid rgb(90, 16, 16); border-bottom: 3px solid rgb(90, 16, 16);">
+    <div data-dc-tpl="31" style="display: inline-block; animation: 18s linear infinite marquee;">
+      <span data-dc-tpl="32" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 700; font-size: 20px; color: rgb(90, 16, 16); padding: 0px 24px;">🍕
+ ENTREGA EM ATÉ 1 MINUTO &nbsp; • &nbsp; BROTINHO R$8 &nbsp; • &nbsp; 
+FAMÍLIA R$13 &nbsp; • &nbsp; 5 SABORES CAMPEÕES &nbsp; • &nbsp; 🍕 
+ENTREGA EM ATÉ 1 MINUTO &nbsp; • &nbsp; BROTINHO R$8 &nbsp; • &nbsp; 
+FAMÍLIA R$13 &nbsp; • &nbsp; 5 SABORES CAMPEÕES &nbsp; • &nbsp;</span>
+      <span data-dc-tpl="33" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 700; font-size: 20px; color: rgb(90, 16, 16); padding: 0px 24px;">🍕
+ ENTREGA EM ATÉ 1 MINUTO &nbsp; • &nbsp; BROTINHO R$8 &nbsp; • &nbsp; 
+FAMÍLIA R$13 &nbsp; • &nbsp; 5 SABORES CAMPEÕES &nbsp; • &nbsp; 🍕 
+ENTREGA EM ATÉ 1 MINUTO &nbsp; • &nbsp; BROTINHO R$8 &nbsp; • &nbsp; 
+FAMÍLIA R$13 &nbsp; • &nbsp; 5 SABORES CAMPEÕES &nbsp; • &nbsp;</span>
+    </div>
+  </div>
+
+  
+  <section data-dc-tpl="34" style="padding: 90px 6vw; display: flex; align-items: center; gap: 60px; flex-wrap: wrap; justify-content: center; text-align: center;background: #F5D77A;">
+    <div data-dc-tpl="35" style="max-width: 720px;">
+      <span data-dc-tpl="36" style="color: rgb(200, 30, 30); font-weight: 700; letter-spacing: 2px; font-size: 13px; text-transform: uppercase;">Nossa marca registrada</span>
+      <h2 data-dc-tpl="37" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 800; font-size: clamp(32px, 4vw, 48px); margin: 14px 0px 20px; color: rgb(90, 16, 16);">
+        Pedido feito, pizza na mesa em <span data-dc-tpl="38" style="color: rgb(200, 30, 30);">1 minuto</span>*
+      </h2>
+      <p data-dc-tpl="39" style="font-size: 17px; line-height: 1.7; color: rgb(90, 66, 55); max-width: 600px; margin: 0px auto 8px;">
+        Fomos além do delivery rápido: nosso forno fica a poucos passos 
+do seu bairro. Assim que o pedido chega, a pizza sai do forno e vai 
+direto pra sua porta — quente, no ponto, e com aquele sabor de realeza.
+      </p>
+      <p data-dc-tpl="40" style="font-size: 13px; color: rgb(156, 122, 99); margin-top: 18px;">*Tempo médio de entrega para clientes na área de cobertura imediata.</p>
+    </div>
+  </section>
+
+  
+  <section data-dc-tpl="41" id="cardapio" data-screen-label="Cardápio" style="background: rgb(90, 16, 16); padding: 90px 6vw;">
+    <div data-dc-tpl="42" style="text-align: center; margin-bottom: 52px;">
+      <span data-dc-tpl="43" style="color: rgb(245, 215, 122); font-weight: 700; letter-spacing: 2px; font-size: 13px; text-transform: uppercase;">Cardápio</span>
+      <h2 data-dc-tpl="44" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 800; font-size: clamp(32px, 4vw, 46px); margin: 14px 0px 0px; color: rgb(255, 248, 236);">5 sabores dignos de coroa</h2>
+    </div>
+    <div data-dc-tpl="45" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 26px; max-width: 1200px; margin: 0px auto;">
+      
+        <div data-dc-tpl="47" style="background: rgb(74, 13, 13); border: 1px solid rgba(245, 215, 122, 0.25); border-radius: 20px; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px;">
+          <div data-dc-tpl="48" style="width: 56px; height: 56px; border-radius: 50%; background: rgb(200, 30, 30); display: flex; align-items: center; justify-content: center; font-size: 26px;"><span class="sc-interp">🍖</span></div>
+          <h3 data-dc-tpl="49" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 700; font-size: 22px; color: rgb(245, 215, 122); margin: 0px;"><span class="sc-interp">Calabresa</span></h3>
+          <p data-dc-tpl="50" style="font-size: 14px; color: rgb(232, 205, 184); line-height: 1.5; margin: 0px; min-height: 44px;"><span class="sc-interp">Calabresa fatiada, cebola e mussarela derretida.</span></p>
+          <div data-dc-tpl="51" style="display: flex; gap: 14px; margin-top: 6px; border-top: 1px dashed rgba(245, 215, 122, 0.3); padding-top: 14px;">
+            <div data-dc-tpl="52" style="flex: 1 1 0%;">
+              <div data-dc-tpl="53" style="font-size: 12px; color: rgb(185, 155, 133); text-transform: uppercase; letter-spacing: 1px;">Brotinho</div>
+              <div data-dc-tpl="54" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 700; font-size: 22px; color: rgb(255, 248, 236);">R$8</div>
+            </div>
+            <div data-dc-tpl="55" style="flex: 1 1 0%;">
+              <div data-dc-tpl="56" style="font-size: 12px; color: rgb(185, 155, 133); text-transform: uppercase; letter-spacing: 1px;">Família</div>
+              <div data-dc-tpl="57" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 700; font-size: 22px; color: rgb(255, 248, 236);">R$13</div>
+            </div>
+          </div>
+        </div>
+      
+        <div data-dc-tpl="47" style="background: rgb(74, 13, 13); border: 1px solid rgba(245, 215, 122, 0.25); border-radius: 20px; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px;">
+          <div data-dc-tpl="48" style="width: 56px; height: 56px; border-radius: 50%; background: rgb(200, 30, 30); display: flex; align-items: center; justify-content: center; font-size: 26px;"><span class="sc-interp">🧀</span></div>
+          <h3 data-dc-tpl="49" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 700; font-size: 22px; color: rgb(245, 215, 122); margin: 0px;"><span class="sc-interp">4 Queijos</span></h3>
+          <p data-dc-tpl="50" style="font-size: 14px; color: rgb(232, 205, 184); line-height: 1.5; margin: 0px; min-height: 44px;"><span class="sc-interp">Mussarela, provolone, parmesão e catupiry.</span></p>
+          <div data-dc-tpl="51" style="display: flex; gap: 14px; margin-top: 6px; border-top: 1px dashed rgba(245, 215, 122, 0.3); padding-top: 14px;">
+            <div data-dc-tpl="52" style="flex: 1 1 0%;">
+              <div data-dc-tpl="53" style="font-size: 12px; color: rgb(185, 155, 133); text-transform: uppercase; letter-spacing: 1px;">Brotinho</div>
+              <div data-dc-tpl="54" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 700; font-size: 22px; color: rgb(255, 248, 236);">R$8</div>
+            </div>
+            <div data-dc-tpl="55" style="flex: 1 1 0%;">
+              <div data-dc-tpl="56" style="font-size: 12px; color: rgb(185, 155, 133); text-transform: uppercase; letter-spacing: 1px;">Família</div>
+              <div data-dc-tpl="57" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 700; font-size: 22px; color: rgb(255, 248, 236);">R$13</div>
+            </div>
+          </div>
+        </div>
+      
+        <div data-dc-tpl="47" style="background: rgb(74, 13, 13); border: 1px solid rgba(245, 215, 122, 0.25); border-radius: 20px; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px;">
+          <div data-dc-tpl="48" style="width: 56px; height: 56px; border-radius: 50%; background: rgb(200, 30, 30); display: flex; align-items: center; justify-content: center; font-size: 26px;"><span class="sc-interp">🍗</span></div>
+          <h3 data-dc-tpl="49" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 700; font-size: 22px; color: rgb(245, 215, 122); margin: 0px;"><span class="sc-interp">Frango</span></h3>
+          <p data-dc-tpl="50" style="font-size: 14px; color: rgb(232, 205, 184); line-height: 1.5; margin: 0px; min-height: 44px;"><span class="sc-interp">Frango desfiado com catupiry e milho.</span></p>
+          <div data-dc-tpl="51" style="display: flex; gap: 14px; margin-top: 6px; border-top: 1px dashed rgba(245, 215, 122, 0.3); padding-top: 14px;">
+            <div data-dc-tpl="52" style="flex: 1 1 0%;">
+              <div data-dc-tpl="53" style="font-size: 12px; color: rgb(185, 155, 133); text-transform: uppercase; letter-spacing: 1px;">Brotinho</div>
+              <div data-dc-tpl="54" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 700; font-size: 22px; color: rgb(255, 248, 236);">R$8</div>
+            </div>
+            <div data-dc-tpl="55" style="flex: 1 1 0%;">
+              <div data-dc-tpl="56" style="font-size: 12px; color: rgb(185, 155, 133); text-transform: uppercase; letter-spacing: 1px;">Família</div>
+              <div data-dc-tpl="57" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 700; font-size: 22px; color: rgb(255, 248, 236);">R$13</div>
+            </div>
+          </div>
+        </div>
+      
+        <div data-dc-tpl="47" style="background: rgb(74, 13, 13); border: 1px solid rgba(245, 215, 122, 0.25); border-radius: 20px; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px;">
+          <div data-dc-tpl="48" style="width: 56px; height: 56px; border-radius: 50%; background: rgb(200, 30, 30); display: flex; align-items: center; justify-content: center; font-size: 26px;"><span class="sc-interp">🟡</span></div>
+          <h3 data-dc-tpl="49" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 700; font-size: 22px; color: rgb(245, 215, 122); margin: 0px;"><span class="sc-interp">Cheddar</span></h3>
+          <p data-dc-tpl="50" style="font-size: 14px; color: rgb(232, 205, 184); line-height: 1.5; margin: 0px; min-height: 44px;"><span class="sc-interp">Mussarela coberta com molho cheddar cremoso.</span></p>
+          <div data-dc-tpl="51" style="display: flex; gap: 14px; margin-top: 6px; border-top: 1px dashed rgba(245, 215, 122, 0.3); padding-top: 14px;">
+            <div data-dc-tpl="52" style="flex: 1 1 0%;">
+              <div data-dc-tpl="53" style="font-size: 12px; color: rgb(185, 155, 133); text-transform: uppercase; letter-spacing: 1px;">Brotinho</div>
+              <div data-dc-tpl="54" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 700; font-size: 22px; color: rgb(255, 248, 236);">R$8</div>
+            </div>
+            <div data-dc-tpl="55" style="flex: 1 1 0%;">
+              <div data-dc-tpl="56" style="font-size: 12px; color: rgb(185, 155, 133); text-transform: uppercase; letter-spacing: 1px;">Família</div>
+              <div data-dc-tpl="57" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 700; font-size: 22px; color: rgb(255, 248, 236);">R$13</div>
+            </div>
+          </div>
+        </div>
+      
+        <div data-dc-tpl="47" style="background: rgb(74, 13, 13); border: 1px solid rgba(245, 215, 122, 0.25); border-radius: 20px; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px;">
+          <div data-dc-tpl="48" style="width: 56px; height: 56px; border-radius: 50%; background: rgb(200, 30, 30); display: flex; align-items: center; justify-content: center; font-size: 26px;"><span class="sc-interp">🥓</span></div>
+          <h3 data-dc-tpl="49" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 700; font-size: 22px; color: rgb(245, 215, 122); margin: 0px;"><span class="sc-interp">Bacon</span></h3>
+          <p data-dc-tpl="50" style="font-size: 14px; color: rgb(232, 205, 184); line-height: 1.5; margin: 0px; min-height: 44px;"><span class="sc-interp">Bacon crocante, mussarela e toque de orégano.</span></p>
+          <div data-dc-tpl="51" style="display: flex; gap: 14px; margin-top: 6px; border-top: 1px dashed rgba(245, 215, 122, 0.3); padding-top: 14px;">
+            <div data-dc-tpl="52" style="flex: 1 1 0%;">
+              <div data-dc-tpl="53" style="font-size: 12px; color: rgb(185, 155, 133); text-transform: uppercase; letter-spacing: 1px;">Brotinho</div>
+              <div data-dc-tpl="54" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 700; font-size: 22px; color: rgb(255, 248, 236);">R$8</div>
+            </div>
+            <div data-dc-tpl="55" style="flex: 1 1 0%;">
+              <div data-dc-tpl="56" style="font-size: 12px; color: rgb(185, 155, 133); text-transform: uppercase; letter-spacing: 1px;">Família</div>
+              <div data-dc-tpl="57" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 700; font-size: 22px; color: rgb(255, 248, 236);">R$13</div>
+            </div>
+          </div>
+        </div>
+      
+    </div>
+  </section>
+
+  
+  <section data-dc-tpl="58" id="comentarios" data-screen-label="Comentários" style="padding: 90px 6vw; background: #F5D77A;">
+    <div data-dc-tpl="59" style="text-align: center; margin-bottom: 52px;">
+      <span data-dc-tpl="60" style="color: rgb(200, 30, 30); font-weight: 700; letter-spacing: 2px; font-size: 13px; text-transform: uppercase;">Quem prova, vira súdito</span>
+      <h2 data-dc-tpl="61" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 800; font-size: clamp(32px, 4vw, 46px); margin: 14px 0px 0px; color: rgb(90, 16, 16);">O que dizem nossos clientes</h2>
+    </div>
+    <div data-dc-tpl="62" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 26px; max-width: 1200px; margin: 0px auto;">
+      
+        <div data-dc-tpl="64" style="background: rgb(43, 8, 8); border: 1px solid rgb(240, 223, 200); border-radius: 18px; padding: 28px; box-shadow: rgba(90, 16, 16, 0.06) 0px 8px 24px;">
+          <div data-dc-tpl="65" style="color: rgb(224, 168, 45); font-size: 16px; letter-spacing: 3px; margin-bottom: 12px;"><span class="sc-interp">★★★★★</span></div>
+          <p data-dc-tpl="66" style="font-size: 15px; line-height: 1.6; color: rgb(255, 255, 255); margin: 0px 0px 18px;">"<span class="sc-interp">Pedi e em menos de 1 minuto já estava batendo na porta. Achei que era brincadeira até experimentar!</span>"</p>
+          <div data-dc-tpl="67" style="display: flex; align-items: center; gap: 12px;">
+            <div data-dc-tpl="68" style="width: 38px; height: 38px; border-radius: 50%; background: rgb(200, 30, 30); color: rgb(245, 215, 122); display: flex; align-items: center; justify-content: center; font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 700;"><span class="sc-interp">M</span></div>
+            <div data-dc-tpl="69">
+              <div data-dc-tpl="70" style="font-weight: 600; font-size: 14px; color: rgb(255, 255, 255);"><span class="sc-interp">Marcos Vinícius</span></div>
+              <div data-dc-tpl="71" style="font-size: 12px; color: rgb(156, 122, 99);"><span class="sc-interp">Bairro Vila Nova</span></div>
+            </div>
+          </div>
+        </div>
+      
+        <div data-dc-tpl="64" style="background: rgb(43, 8, 8); border: 1px solid rgb(240, 223, 200); border-radius: 18px; padding: 28px; box-shadow: rgba(90, 16, 16, 0.06) 0px 8px 24px;">
+          <div data-dc-tpl="65" style="color: rgb(224, 168, 45); font-size: 16px; letter-spacing: 3px; margin-bottom: 12px;"><span class="sc-interp">★★★★★</span></div>
+          <p data-dc-tpl="66" style="font-size: 15px; line-height: 1.6; color: rgb(255, 255, 255); margin: 0px 0px 18px;">"<span class="sc-interp">A brotinho por R$8 é impossível de bater. Vira e mexe peço pra galera do trabalho toda.</span>"</p>
+          <div data-dc-tpl="67" style="display: flex; align-items: center; gap: 12px;">
+            <div data-dc-tpl="68" style="width: 38px; height: 38px; border-radius: 50%; background: rgb(200, 30, 30); color: rgb(245, 215, 122); display: flex; align-items: center; justify-content: center; font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 700;"><span class="sc-interp">F</span></div>
+            <div data-dc-tpl="69">
+              <div data-dc-tpl="70" style="font-weight: 600; font-size: 14px; color: rgb(255, 255, 255);"><span class="sc-interp">Fernanda Alves</span></div>
+              <div data-dc-tpl="71" style="font-size: 12px; color: rgb(156, 122, 99);"><span class="sc-interp">Centro</span></div>
+            </div>
+          </div>
+        </div>
+      
+        <div data-dc-tpl="64" style="background: rgb(43, 8, 8); border: 1px solid rgb(240, 223, 200); border-radius: 18px; padding: 28px; box-shadow: rgba(90, 16, 16, 0.06) 0px 8px 24px;">
+          <div data-dc-tpl="65" style="color: rgb(224, 168, 45); font-size: 16px; letter-spacing: 3px; margin-bottom: 12px;"><span class="sc-interp">★★★★★</span></div>
+          <p data-dc-tpl="66" style="font-size: 15px; line-height: 1.6; color: rgb(255, 255, 255); margin: 0px 0px 18px;">"<span class="sc-interp">A pizza de calabresa do Rei da Pizza é outro nível, e o atendimento pelo WhatsApp é super rápido.</span>"</p>
+          <div data-dc-tpl="67" style="display: flex; align-items: center; gap: 12px;">
+            <div data-dc-tpl="68" style="width: 38px; height: 38px; border-radius: 50%; background: rgb(200, 30, 30); color: rgb(245, 215, 122); display: flex; align-items: center; justify-content: center; font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 700;"><span class="sc-interp">J</span></div>
+            <div data-dc-tpl="69">
+              <div data-dc-tpl="70" style="font-weight: 600; font-size: 14px; color: rgb(255, 255, 255);"><span class="sc-interp">Juliana Costa</span></div>
+              <div data-dc-tpl="71" style="font-size: 12px; color: rgb(156, 122, 99);"><span class="sc-interp">Jardim das Flores</span></div>
+            </div>
+          </div>
+        </div>
+      
+        <div data-dc-tpl="64" style="background: rgb(43, 8, 8); border: 1px solid rgb(240, 223, 200); border-radius: 18px; padding: 28px; box-shadow: rgba(90, 16, 16, 0.06) 0px 8px 24px;">
+          <div data-dc-tpl="65" style="color: rgb(224, 168, 45); font-size: 16px; letter-spacing: 3px; margin-bottom: 12px;"><span class="sc-interp">★★★★★</span></div>
+          <p data-dc-tpl="66" style="font-size: 15px; line-height: 1.6; color: rgb(255, 255, 255); margin: 0px 0px 18px;">"<span class="sc-interp">Virei revendedor deles e o suporte é excelente. Recomendo pra quem quer empreender com pizza.</span>"</p>
+          <div data-dc-tpl="67" style="display: flex; align-items: center; gap: 12px;">
+            <div data-dc-tpl="68" style="width: 38px; height: 38px; border-radius: 50%; background: rgb(200, 30, 30); color: rgb(245, 215, 122); display: flex; align-items: center; justify-content: center; font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 700;"><span class="sc-interp">R</span></div>
+            <div data-dc-tpl="69">
+              <div data-dc-tpl="70" style="font-weight: 600; font-size: 14px; color: rgb(255, 255, 255);"><span class="sc-interp">Roberto Lima</span></div>
+              <div data-dc-tpl="71" style="font-size: 12px; color: rgb(156, 122, 99);"><span class="sc-interp">Zona Norte</span></div>
+            </div>
+          </div>
+        </div>
+      
+    </div>
+  </section>
+
+  
+  <section data-dc-tpl="72" id="contato" data-screen-label="Contato" style="position: relative; background: #5A1010; padding: 90px 6vw; text-align: center;">
+    <span data-dc-tpl="73" style="color: rgb(245, 215, 122); font-weight: 700; letter-spacing: 2px; font-size: 13px; text-transform: uppercase;">Vamos crescer juntos</span>
+    <h2 data-dc-tpl="74" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 800; font-size: clamp(30px, 4vw, 44px); margin: 14px 0px 20px; color: rgb(255, 248, 236);">
+      Quer revender ou virar sócio do Rei da Pizza?
+    </h2>
+    <p data-dc-tpl="75" style="font-size: 17px; line-height: 1.7; color: rgb(251, 228, 208); max-width: 620px; margin: 0px auto 36px;">
+      Fale direto com a gente no WhatsApp: condições especiais para 
+revenda de pizzas e oportunidades de sociedade em novas unidades.
+    </p>
+    <a data-dc-tpl="76" href="https://wa.me/5521966281152?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20falar%20com%20o%20Rei%20da%20Pizza." target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 12px; background: rgb(245, 215, 122); color: rgb(90, 16, 16); text-decoration: none; font-weight: 700; font-size: 18px; padding: 18px 36px; border-radius: 999px; animation: 2.4s ease-out infinite pulse-ring;">
+      💬 Falar no WhatsApp: <span class="sc-interp">(21) 96628-1152</span>
+    </a>
+  </section>
+
+  
+  <footer data-dc-tpl="77" style="background: rgb(43, 8, 8); color: rgb(232, 205, 184); padding: 56px 6vw 28px;">
+    <div data-dc-tpl="78" style="display: flex; flex-wrap: wrap; gap: 40px; justify-content: space-between; max-width: 1200px; margin: 0px auto 36px;">
+      <div data-dc-tpl="79" style="display: flex; align-items: center; gap: 12px; max-width: 320px;">
+        <img data-dc-tpl="80" src="Rei%20da%20Pizza.dc(3)_files/logo_R3HT_v0zQ.png" alt="Rei da Pizza" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;">
+        <div data-dc-tpl="81">
+          <div data-dc-tpl="82" style="font-family: &quot;Baloo 2&quot;, sans-serif; font-weight: 800; font-size: 19px; color: rgb(245, 215, 122);">Rei da Pizza</div>
+          <div data-dc-tpl="83" style="font-size: 13px; color: rgb(185, 155, 133); margin-top: 4px;">A pizza que chega mais rápido que a fome.</div>
+        </div>
+      </div>
+      <div data-dc-tpl="84">
+        <div data-dc-tpl="85" style="font-weight: 700; color: rgb(245, 215, 122); margin-bottom: 12px; font-size: 14px;">Navegação</div>
+        <div data-dc-tpl="86" style="display: flex; flex-direction: column; gap: 8px;">
+          <a data-dc-tpl="87" href="#cardapio" style="color: rgb(232, 205, 184); text-decoration: none; font-size: 14px;">Cardápio</a>
+          <a data-dc-tpl="88" href="#comentarios" style="color: rgb(232, 205, 184); text-decoration: none; font-size: 14px;">Comentários</a>
+          <a data-dc-tpl="89" href="#contato" style="color: rgb(232, 205, 184); text-decoration: none; font-size: 14px;">Contato</a>
+        </div>
+      </div>
+      <div data-dc-tpl="90">
+        <div data-dc-tpl="91" style="font-weight: 700; color: rgb(245, 215, 122); margin-bottom: 12px; font-size: 14px;">Contato</div>
+        <div data-dc-tpl="92" style="display: flex; flex-direction: column; gap: 8px; font-size: 14px;">
+          <a data-dc-tpl="93" href="https://wa.me/5521966281152?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20falar%20com%20o%20Rei%20da%20Pizza." target="_blank" rel="noopener" style="color: rgb(232, 205, 184); text-decoration: none;">WhatsApp: <span class="sc-interp">(21) 96628-1152</span></a>
+          <span data-dc-tpl="94">Seg a Dom · 18h às 00h</span>
+        </div>
+      </div>
+    </div>
+    <div data-dc-tpl="95" style="border-top: 1px solid rgba(232, 205, 184, 0.15); padding-top: 20px; text-align: center; font-size: 12px; color: rgb(138, 107, 87);">
+      © <span class="sc-interp">2026</span> Rei da Pizza. Todos os direitos reservados.
+    </div>
+  </footer></div></div></div>
+<script type="text/x-dc" data-dc-script="" data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 1440, &quot;height&quot;: 900},
+  &quot;whatsappNumber&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;21966281152&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Contato&quot;},
+  &quot;whatsappDisplay&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;(21) 96628-1152&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Contato&quot;},
+  &quot;spinDuration&quot;: {&quot;editor&quot;: &quot;range&quot;, &quot;default&quot;: 14, &quot;min&quot;: 4, &quot;max&quot;: 30, &quot;step&quot;: 1, &quot;unit&quot;: &quot;s&quot;, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Animação&quot;}
+}">
+class Component extends DCLogic {
+  renderVals() {
+    const whatsappNumber = (this.props.whatsappNumber ?? '21966281152').replace(/\D/g, '');
+    const whatsappDisplay = this.props.whatsappDisplay ?? '(21) 96628-1152';
+    const message = encodeURIComponent('Olá! Vim pelo site e quero falar com o Rei da Pizza.');
+    return {
+      whatsappLink: `https://wa.me/55${whatsappNumber}?text=${message}`,
+      whatsappDisplay,
+      spinDuration: this.props.spinDuration ?? 14,
+      year: new Date().getFullYear(),
+      menuItems: [
+        { emoji: '🍖', name: 'Calabresa', desc: 'Calabresa fatiada, cebola e mussarela derretida.' },
+        { emoji: '🧀', name: '4 Queijos', desc: 'Mussarela, provolone, parmesão e catupiry.' },
+        { emoji: '🍗', name: 'Frango', desc: 'Frango desfiado com catupiry e milho.' },
+        { emoji: '🟡', name: 'Cheddar', desc: 'Mussarela coberta com molho cheddar cremoso.' },
+        { emoji: '🥓', name: 'Bacon', desc: 'Bacon crocante, mussarela e toque de orégano.' }
+      ],
+      reviews: [
+        { stars: '★★★★★', text: 'Pedi e em menos de 1 minuto já estava batendo na porta. Achei que era brincadeira até experimentar!', name: 'Marcos Vinícius', location: 'Bairro Vila Nova', initial: 'M' },
+        { stars: '★★★★★', text: 'A brotinho por R$8 é impossível de bater. Vira e mexe peço pra galera do trabalho toda.', name: 'Fernanda Alves', location: 'Centro', initial: 'F' },
+        { stars: '★★★★★', text: 'A pizza de calabresa do Rei da Pizza é outro nível, e o atendimento pelo WhatsApp é super rápido.', name: 'Juliana Costa', location: 'Jardim das Flores', initial: 'J' },
+        { stars: '★★★★★', text: 'Virei revendedor deles e o suporte é excelente. Recomendo pra quem quer empreender com pizza.', name: 'Roberto Lima', location: 'Zona Norte', initial: 'R' }
+      ]
+    };
+  }
+}
+
+</script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body></html>
