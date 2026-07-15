@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rei da Pizza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+  :root{
+    --cream:#FFF8EC;
+    --red-dark:#5A1010;
+    --red-deep:#4A0D0D;
+    --red-card:#2B0808;
+    --red-accent:#C81E1E;
+    --gold:#F5D77A;
+    --gold-shadow:#B8963E;
+    --text-dark:#2B1710;
+    --text-body:#5A4234;
+    --brown-muted:#9C7A63;
+    --cream-soft:#FBE4D0;
+  }
+  html{overflow-x:hidden}
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;background:var(--cream);color:var(--text-dark);font-family:'Poppins',sans-serif;overflow-x:hidden}
+  h1,h2,h3,h4{font-family:'Baloo 2',sans-serif;margin:0}
+  p{margin:0}
+  a{color:inherit}
+  img,svg{display:block;max-width:100%}
+  button{font-family:inherit}
+  .visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+  a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{
+    outline:3px solid var(--gold); outline-offset:2px; border-radius:4px;
+  }
+  @keyframes spin-pizza {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  @keyframes float-badge{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-10px) rotate(-8deg)}}
+  @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  @keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(224,168,45,.55)}70%{box-shadow:0 0 0 14px rgba(224,168,45,0)}100%{box-shadow:0 0 0 0 rgba(224,168,45,0)}}
+
+  .container{max-width:1300px;margin:0 auto}
+
+  /* ============ HEADER ============ */
+  .site-header{display:flex;align-items:center;justify-content:space-between;padding:16px 6vw;background:var(--red-card);position:sticky;top:0;z-index:60}
+  .brand{display:flex;align-items:center;gap:12px;min-width:0}
+  .brand-logo{width:48px;height:48px;border-radius:50%;object-fit:cover;box-shadow:0 2px 10px rgba(0,0,0,.35);flex-shrink:0}
+  .brand-name{font-weight:800;font-size:21px;color:var(--gold);letter-spacing:.3px;white-space:nowrap}
+  .main-nav{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+  .main-nav a{text-decoration:none;font-weight:600;font-size:15px;color:var(--cream)}
+  .btn-pill{background:var(--gold);color:#5A1010;text-decoration:none;font-weight:700;font-size:14px;padding:10px 20px;border-radius:999px;box-shadow:0 3px 0 var(--gold-shadow);border:none;cursor:pointer;display:inline-block}
+  .btn-pill:hover{transform:translateY(-1px)}
+
+  /* ============ HERO ============ */
+  .hero{position:relative;background:var(--red-dark);padding:56px 6vw;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:48px}
+  .hero-copy{max-width:560px;z-index:2}
+  .eyebrow-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.14);border:1px solid rgba(245,215,122,.5);color:var(--gold);font-weight:600;font-size:13px;padding:8px 16px;border-radius:999px;margin-bottom:20px}
+  .hero-copy h1{font-weight:800;font-size:clamp(32px,4.6vw,58px);line-height:1.08;color:var(--cream);margin:0 0 20px}
+  .hero-copy h1 span{color:var(--gold)}
+  .hero-copy p{font-size:17px;line-height:1.6;color:#FBE4D0;margin:0 0 30px;max-width:460px}
+  .hero-actions{display:flex;gap:16px;flex-wrap:wrap}
+  .btn-outline{background:transparent;color:var(--cream);text-decoration:none;font-weight:700;font-size:16px;padding:15px 28px;border-radius:999px;border:2px solid rgba(255,248,236,.5);text-align:center}
+  .btn-gold-lg{background:var(--gold);color:#5A1010;text-decoration:none;font-weight:700;font-size:16px;padding:15px 28px;border-radius:999px;box-shadow:0 5px 0 var(--gold-shadow);text-align:center}
+  .hero-art{position:relative;width:100%;max-width:460px;margin-left:auto;display:flex;align-items:center;justify-content:center;z-index:2}
+  .hero-glow{position:absolute;width:88%;height:88%;border-radius:50%;background:radial-gradient(circle,rgba(245,215,122,.35) 0%,rgba(245,215,122,0) 70%)}
+  .hero-pizza-img{width:100%;max-width:420px;filter:drop-shadow(0 25px 40px rgba(0,0,0,.45));position:relative;z-index:1;border-radius:50%;animation:spin-pizza 16s linear infinite}
+  .hero-badge{position:absolute;top:4%;right:0;background:var(--gold);color:#5A1010;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:14px;text-align:center;width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1.15;border:3px dashed #5A1010;animation:float-badge 3.4s ease-in-out infinite;z-index:3}
+
+  /* ============ MARQUEE ============ */
+  .marquee-wrap{background:var(--gold);padding:14px 0;overflow:hidden;white-space:nowrap;border-top:3px solid var(--red-dark);border-bottom:3px solid var(--red-dark)}
+  .marquee-track{display:inline-block;animation:marquee 18s linear infinite}
+  .marquee-track span{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:20px;color:var(--red-dark);padding:0 24px}
+
+  /* ============ FEATURE ============ */
+  .feature{padding:72px 6vw;display:flex;align-items:center;gap:60px;flex-wrap:wrap;justify-content:center;text-align:center;background:#F5D77A}
+  .feature-inner{max-width:720px}
+  .feature .eyebrow{color:var(--red-accent);font-weight:700;letter-spacing:2px;font-size:13px;text-transform:uppercase}
+  .feature h2{font-weight:800;font-size:clamp(28px,3.6vw,44px);margin:14px 0 18px;color:var(--red-dark)}
+  .feature h2 span{color:var(--red-accent)}
+  .feature p{font-size:16px;line-height:1.7;color:var(--text-body);max-width:600px;margin:0 auto 8px}
+  .feature small{display:block;font-size:13px;color:var(--brown-muted);margin-top:16px}
+
+  /* ============ CARDÁPIO ============ */
+  .menu-section{background:var(--red-dark);padding:72px 6vw}
+  .section-head{text-align:center;margin-bottom:44px}
+  .section-head .eyebrow{color:var(--red-dark);font-weight:700;letter-spacing:2px;font-size:13px;text-transform:uppercase}
+    .section-head h2{color:var(--red-dark);font-weight:800;font-size:clamp(28px,3.6vw,42px);margin:14px 0 0}
+  .menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:24px;max-width:1300px;margin:0 auto}
+  .menu-card{background:var(--red-deep);border:1px solid rgba(245,215,122,.25);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+  .menu-card-media{width:100%;aspect-ratio:1/1;background:var(--red-card);overflow:hidden}
+  .menu-card-media img{width:100%;height:100%;object-fit:cover}
+  .menu-card-content{padding:18px 18px 20px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .menu-card h3{font-weight:700;font-size:19px;color:var(--gold);margin:0}
+  .menu-card p{font-size:13.5px;line-height:1.5;color:#E8CDB8;margin:0;flex-grow:1}
+  .menu-card-actions{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+  .btn-buy{border:none;border-radius:12px;padding:12px 14px;font-weight:700;font-size:14px;cursor:pointer;text-align:center;transition:transform .15s ease;width:100%}
+  .btn-buy:hover{transform:scale(1.03)}
+  .btn-buy.varejo{background:var(--gold);color:#5A1010}
+  .btn-buy.atacado{background:transparent;color:var(--gold);border:2px solid var(--gold)}
+
+  /* ============ COMENTÁRIOS ============ */
+  .reviews-section{background:var(--gold);padding:72px 6vw}
+  .reviews-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;max-width:1200px;margin:0 auto}
+  .review-card{background:var(--red-card);border:1px solid #F0DFC8;border-radius:16px;padding:24px;box-shadow:0 8px 24px rgba(90,16,16,.06)}
+  .review-stars{color:#E0A82D;font-size:16px;letter-spacing:3px;margin-bottom:12px}
+  .review-text{font-size:14.5px;line-height:1.6;color:#fff;margin:0 0 16px}
+  .review-person{display:flex;align-items:center;gap:12px}
+  .review-avatar{width:36px;height:36px;border-radius:50%;background:var(--red-accent);color:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',sans-serif;font-weight:700;flex-shrink:0}
+  .review-name{font-weight:600;font-size:14px;color:#fff}
+  .review-loc{font-size:12px;color:var(--brown-muted)}
+
+  /* ============ CONTATO / REVENDEDOR ============ */
+  .contact-section{position:relative;background:var(--red-dark);padding:72px 6vw;text-align:center}
+  .contact-section .eyebrow{color:var(--gold);font-weight:700;letter-spacing:2px;font-size:13px;text-transform:uppercase}
+  .contact-section h2{font-weight:800;font-size:clamp(26px,3.6vw,40px);margin:14px 0 18px;color:var(--cream)}
+  .contact-section p{font-size:16px;line-height:1.7;color:#FBE4D0;max-width:620px;margin:0 auto 32px}
+  .btn-whatsapp{display:inline-flex;align-items:center;justify-content:center;gap:12px;background:var(--gold);color:#5A1010;text-decoration:none;font-weight:700;font-size:17px;padding:17px 34px;border-radius:999px;animation:pulse-ring 2.4s ease-out infinite;border:none;cursor:pointer;max-width:100%}
+
+  /* ============ FOOTER ============ */
+  .site-footer{background:var(--red-card);color:#E8CDB8;padding:48px 6vw 24px}
+  .footer-top{display:flex;flex-wrap:wrap;gap:36px;justify-content:space-between;max-width:1200px;margin:0 auto 32px}
+  .footer-brand{display:flex;align-items:center;gap:12px;max-width:320px}
+  .footer-brand-logo{width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0}
+  .footer-brand-name{font-weight:800;font-size:18px;color:var(--gold)}
+  .footer-brand-tag{font-size:13px;color:#B99B85;margin-top:4px}
+  .footer-col-title{font-weight:700;color:var(--gold);margin-bottom:12px;font-size:14px}
+  .footer-links{display:flex;flex-direction:column;gap:8px}
+  .footer-links a{color:#E8CDB8;text-decoration:none;font-size:14px}
+  .footer-bottom{border-top:1px solid rgba(232,205,184,.15);padding-top:18px;text-align:center;font-size:12px;color:var(--brown-muted)}
+
+  /* ============ DRAWER ============ */
+  .drawer-overlay{position:fixed;inset:0;background:rgba(20,8,8,.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:100}
+  .drawer-overlay.open{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:0;height:100%;width:min(440px,92vw);background:var(--cream);z-index:101;box-shadow:-12px 0 40px rgba(0,0,0,.35);transform:translateX(100%);display:flex;flex-direction:column;outline:none}
+  .drawer-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;background:var(--red-dark);color:var(--cream)}
+  .drawer-header h3{font-size:17px;color:var(--gold)}
+  .drawer-close{background:none;border:none;color:var(--cream);font-size:22px;cursor:pointer;line-height:1;padding:6px;border-radius:8px}
+  .drawer-close:hover{transform:scale(1.1)}
+  .drawer-body{padding:20px;overflow-y:auto;flex:1}
+  .drawer-pizza{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+  .drawer-pizza-media{width:60px;height:60px;border-radius:14px;overflow:hidden;flex-shrink:0;background:var(--red-card)}
+  .drawer-pizza-media img{width:100%;height:100%;object-fit:cover}
+  .drawer-pizza-name{font-weight:700;font-size:17px;color:var(--red-dark)}
+  .drawer-pizza-cat{display:inline-block;margin-top:4px;font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--red-accent);background:rgba(200,30,30,.1);padding:3px 10px;border-radius:999px}
+  .drawer-block{margin-bottom:24px}
+  .drawer-block-title{font-weight:700;font-size:13.5px;color:var(--red-dark);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
+  .qty-stepper{display:inline-flex;align-items:center;gap:0;border:2px solid var(--red-dark);border-radius:999px;overflow:hidden}
+  .qty-btn{background:var(--red-dark);color:var(--cream);border:none;width:38px;height:38px;font-size:18px;cursor:pointer;font-weight:700}
+  .qty-btn:hover{background:var(--red-accent)}
+  .qty-value{min-width:44px;text-align:center;font-weight:700;font-size:16px;color:var(--red-dark)}
+  .qty-hint{font-size:12px;color:var(--brown-muted);margin-top:8px}
+  .flavor-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .flavor-check{display:flex;align-items:center;gap:8px;font-size:13px;padding:7px 9px;border:1px solid #E4CBB2;border-radius:10px;cursor:pointer;background:#fff}
+  .flavor-check input{accent-color:var(--red-accent);width:16px;height:16px;flex-shrink:0}
+  .flavor-check-img{width:24px;height:24px;border-radius:50%;object-fit:cover;flex-shrink:0}
+  .flavor-check.checked{border-color:var(--red-accent);background:rgba(200,30,30,.06)}
+  .radio-card{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid #E4CBB2;border-radius:12px;cursor:pointer;margin-bottom:10px;background:#fff}
+  .radio-card input{margin-top:3px;accent-color:var(--red-accent);width:16px;height:16px;flex-shrink:0}
+  .radio-card.checked{border-color:var(--red-accent);background:rgba(200,30,30,.06)}
+  .radio-card .radio-title{font-weight:600;font-size:14px;color:var(--text-dark)}
+  .radio-card .radio-sub{font-size:12.5px;color:var(--brown-muted);margin-top:2px}
+  .price-card{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px;border:1px solid #E4CBB2;border-radius:12px;cursor:pointer;margin-bottom:10px;background:#fff}
+  .price-card input{accent-color:var(--red-accent);width:16px;height:16px;flex-shrink:0}
+  .price-card.checked{border-color:var(--red-accent);background:rgba(200,30,30,.06)}
+  .price-card-left{display:flex;align-items:center;gap:10px}
+  .price-card-title{font-weight:600;font-size:14px;color:var(--text-dark)}
+  .price-card-sub{font-size:12px;color:var(--brown-muted)}
+  .price-card-amount{font-weight:700;color:var(--red-accent);font-size:15px;white-space:nowrap}
+  .summary-box{background:var(--red-deep);border-radius:16px;padding:18px 18px 8px;color:var(--cream)}
+  .summary-row{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:8px 0;border-bottom:1px dashed rgba(245,215,122,.2)}
+  .summary-row .label{color:#D8B8A0}
+  .summary-row .value{font-weight:600;text-align:right}
+  .summary-row.total{border-bottom:none;font-size:17px;padding-top:14px}
+  .summary-row.total .label,.summary-row.total .value{color:var(--gold);font-weight:800}
+  .drawer-footer{padding:16px 20px;border-top:1px solid #EADFCE;background:var(--cream)}
+  .btn-finalize{width:100%;background:var(--red-accent);color:#fff;border:none;border-radius:999px;padding:16px;font-weight:700;font-size:16px;cursor:pointer;box-shadow:0 4px 0 #8f1414}
+  .btn-finalize:hover{transform:scale(1.02)}
+  .btn-finalize:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+  /* ============ RESPONSIVE — TABLET ============ */
+  @media (max-width:1024px){
+    .menu-grid{grid-template-columns:repeat(2,1fr)}
+    .reviews-grid{grid-template-columns:repeat(2,1fr)}
+    .hero{gap:32px;padding:48px 6vw}
+    .site-header{padding:14px 5vw}
+    .menu-section,.reviews-section,.feature,.contact-section{padding-left:5vw;padding-right:5vw}
+  }
+
+  /* ============ RESPONSIVE — MOBILE ============ */
+  @media (max-width:640px){
+    .site-header{padding:12px 5vw;gap:10px}
+    .main-nav{gap:12px}
+    .main-nav a:not(.btn-pill){display:none}
+    .btn-pill{padding:9px 16px;font-size:13px}
+    .brand-name{font-size:18px}
+    .brand-logo{width:42px;height:42px}
+
+    .hero{grid-template-columns:1fr;padding:40px 6vw;text-align:center;gap:28px}
+    .hero-copy{max-width:100%;margin:0 auto}
+    .hero-copy p{margin-left:auto;margin-right:auto}
+    .hero-actions{justify-content:center}
+    .hero-actions a{flex:1 1 auto;width:100%}
+    .hero-art{margin:0 auto;max-width:280px}
+    .hero-badge{width:80px;height:80px;font-size:11px}
+
+    .feature,.menu-section,.reviews-section,.contact-section{padding:48px 6vw}
+    .menu-grid,.reviews-grid{grid-template-columns:1fr}
+    .flavor-grid{grid-template-columns:1fr}
+
+    .footer-top{flex-direction:column;gap:28px}
+
+    .drawer{width:100vw}
+  }
+
+  @media (max-width:400px){
+    .hero-copy h1{font-size:30px}
+    .btn-whatsapp{font-size:15px;padding:15px 20px}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand">
+    <img class="brand-logo" src="./assets/logo.png" alt="Rei da Pizza">
+    <span class="brand-name">Rei da Pizza</span>
+  </div>
+  <nav class="main-nav" aria-label="Navegação principal">
+    <a href="#cardapio">Cardápio</a>
+    <a href="#comentarios">Comentários</a>
+    <a href="#contato">Contato</a>
+    <a class="btn-pill" href="https://wa.me/5521966281152?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20falar%20com%20o%20Rei%20da%20Pizza." target="_blank" rel="noopener">Peça agora</a>
+  </nav>
+</header>
+
+<section class="hero" data-anim="hero">
+  <div class="hero-copy">
+    <div class="eyebrow-pill">👑 A pizzaria mais rápida da região</div>
+    <h1>A pizza mais rápida da cidade,<br>com sabor de <span>rei</span>.</h1>
+    <p>10 sabores campeões, no varejo ou no atacado. Escolha, monte seu pedido e receba pelo WhatsApp em poucos passos.</p>
+    <div class="hero-actions">
+      <a class="btn-gold-lg" href="https://wa.me/5521966281152?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20falar%20com%20o%20Rei%20da%20Pizza." target="_blank" rel="noopener">Chamar no WhatsApp</a>
+      <a class="btn-outline" href="#cardapio">Ver cardápio</a>
+    </div>
+  </div>
+  <div class="hero-art">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <img class="hero-pizza-img" src="./assets/pizza-hero.png" alt="Pizza especial Rei da Pizza">
+    <div class="hero-badge" aria-hidden="true">ENTREGA<br>RÁPIDA<br>GARANTIDA</div>
+  </div>
+</section>
+
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-track">
+    <span>🍕 10 SABORES CAMPEÕES &nbsp; • &nbsp; VAREJO E ATACADO &nbsp; • &nbsp; PEÇA PELO WHATSAPP &nbsp; • &nbsp; 🍕 10 SABORES CAMPEÕES &nbsp; • &nbsp; VAREJO E ATACADO &nbsp; • &nbsp; PEÇA PELO WHATSAPP &nbsp; • &nbsp;</span>
+    <span>🍕 10 SABORES CAMPEÕES &nbsp; • &nbsp; VAREJO E ATACADO &nbsp; • &nbsp; PEÇA PELO WHATSAPP &nbsp; • &nbsp; 🍕 10 SABORES CAMPEÕES &nbsp; • &nbsp; VAREJO E ATACADO &nbsp; • &nbsp; PEÇA PELO WHATSAPP &nbsp; • &nbsp;</span>
+  </div>
+</div>
+
+<section class="feature" data-anim="section-title">
+  <div class="feature-inner">
+    <span class="eyebrow">Nossa marca registrada</span>
+    <h2>Pedido feito, pizza na mesa em <span>tempo recorde</span>*</h2>
+    <p>Fomos além do delivery rápido: nosso forno fica a poucos passos do seu bairro. Assim que o pedido chega, a pizza sai do forno e vai direto pra sua porta — quente, no ponto, e com aquele sabor de realeza.</p>
+    <small>*Tempo médio de entrega para clientes na área de cobertura imediata.</small>
+  </div>
+</section>
+
+<section class="menu-section" id="cardapio" data-screen-label="Cardápio">
+  <div class="section-head" data-anim="section-title">
+    <span class="eyebrow">Cardápio</span>
+    <h2>10 sabores dignos de coroa</h2>
+  </div>
+  <div class="menu-grid" id="menu-grid" data-anim="cards"></div>
+</section>
+
+<section class="reviews-section" id="comentarios" data-screen-label="Comentários">
+  <div class="section-head" data-anim="section-title">
+    <span class="eyebrow">Comentários</span>
+    <h2 style="color:var(--gold)">Quem já provou, aprova</h2>
+  </div>
+  <div class="reviews-grid" data-anim="cards">
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"Pedi e em pouco tempo já estava batendo na porta. Achei que era brincadeira até experimentar!"</p>
+      <div class="review-person">
+        <div class="review-avatar">M</div>
+        <div>
+          <div class="review-name">Marcos Vinícius</div>
+          <div class="review-loc">Bairro Vila Nova</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"O preço é impossível de bater. Vira e mexe peço pra galera do trabalho toda."</p>
+      <div class="review-person">
+        <div class="review-avatar">F</div>
+        <div>
+          <div class="review-name">Fernanda Alves</div>
+          <div class="review-loc">Centro</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"A pizza de calabresa do Rei da Pizza é outro nível, e o atendimento pelo WhatsApp é super rápido."</p>
+      <div class="review-person">
+        <div class="review-avatar">J</div>
+        <div>
+          <div class="review-name">Juliana Costa</div>
+          <div class="review-loc">Jardim das Flores</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"Virei revendedor deles e o suporte é excelente. Recomendo pra quem quer empreender com pizza."</p>
+      <div class="review-person">
+        <div class="review-avatar">R</div>
+        <div>
+          <div class="review-name">Roberto Lima</div>
+          <div class="review-loc">Zona Norte</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact-section" id="contato" data-screen-label="Contato" data-anim="section-title">
+  <span class="eyebrow">Vamos crescer juntos</span>
+  <h2>Quer revender ou virar sócio do Rei da Pizza?</h2>
+  <p>Fale direto com a gente no WhatsApp: condições especiais para revenda de pizzas e oportunidades de sociedade em novas unidades.</p>
+  <a class="btn-whatsapp" id="btn-revendedor" href="#" target="_blank" rel="noopener">💬 Torne-se um Revendedor</a>
+</section>
+
+<footer class="site-footer" data-anim="footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <img class="footer-brand-logo" src="./assets/logo.png" alt="Rei da Pizza">
+      <div>
+        <div class="footer-brand-name">Rei da Pizza</div>
+        <div class="footer-brand-tag">A pizza que chega mais rápido que a fome.</div>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Navegação</div>
+      <div class="footer-links">
+        <a href="#cardapio">Cardápio</a>
+        <a href="#comentarios">Comentários</a>
+        <a href="#contato">Contato</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Contato</div>
+      <div class="footer-links">
+        <a href="https://wa.me/5521966281152?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20falar%20com%20o%20Rei%20da%20Pizza." target="_blank" rel="noopener">WhatsApp: (21) 96628-1152</a>
+        <span>Seg a Dom · 18h às 00h</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">© <span id="footer-year"></span> Rei da Pizza. Todos os direitos reservados.</div>
+</footer>
+
+<!-- DRAWER -->
+<div class="drawer-overlay" id="drawer-overlay"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" tabindex="-1">
+  <div class="drawer-header">
+    <h3 id="drawer-title">Montar pedido</h3>
+    <button class="drawer-close" id="drawer-close" aria-label="Fechar pedido">✕</button>
+  </div>
+  <div class="drawer-body">
+
+    <div class="drawer-pizza">
+      <div class="drawer-pizza-media"><img id="drawer-pizza-img" src="" alt=""></div>
+      <div>
+        <div class="drawer-pizza-name" id="drawer-pizza-name">—</div>
+        <span class="drawer-pizza-cat" id="drawer-pizza-cat">Varejo</span>
+      </div>
+    </div>
+
+    <div class="drawer-block">
+      <div class="drawer-block-title">Quantidade</div>
+      <div class="qty-stepper">
+        <button class="qty-btn" id="qty-minus" type="button" aria-label="Diminuir quantidade">−</button>
+        <span class="qty-value" id="qty-value" aria-live="polite">1</span>
+        <button class="qty-btn" id="qty-plus" type="button" aria-label="Aumentar quantidade">+</button>
+      </div>
+      <p class="qty-hint" id="qty-hint">Quantidade por sabor selecionado.</p>
+    </div>
+
+    <div class="drawer-block">
+      <div class="drawer-block-title">Sabores</div>
+      <div class="flavor-grid" id="flavor-grid" role="group" aria-label="Selecione os sabores"></div>
+    </div>
+
+    <div class="drawer-block">
+      <div class="drawer-block-title">Forma de recebimento</div>
+      <div id="delivery-group" role="radiogroup" aria-label="Forma de recebimento">
+        <label class="radio-card" data-value="uber">
+          <input type="radio" name="delivery" value="uber">
+          <span>
+            <span class="radio-title">Uber Flash</span>
+            <span class="radio-sub">Valor do frete será calculado antes da confirmação do pedido.</span>
+          </span>
+        </label>
+        <label class="radio-card" data-value="retirada">
+          <input type="radio" name="delivery" value="retirada">
+          <span>
+            <span class="radio-title">Retirada na loja</span>
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <div class="drawer-block">
+      <div class="drawer-block-title" id="price-block-title">Preço — Varejo</div>
+      <div id="price-group" role="radiogroup" aria-labelledby="price-block-title"></div>
+    </div>
+
+    <div class="drawer-block">
+      <div class="drawer-block-title">Resumo</div>
+      <div class="summary-box">
+        <div class="summary-row"><span class="label">Sabores selecionados</span><span class="value" id="sum-flavors">—</span></div>
+        <div class="summary-row"><span class="label">Quantidade por sabor</span><span class="value" id="sum-qty">1</span></div>
+        <div class="summary-row"><span class="label">Total de pizzas</span><span class="value" id="sum-total-units">—</span></div>
+        <div class="summary-row"><span class="label">Tipo</span><span class="value" id="sum-type">Varejo</span></div>
+        <div class="summary-row"><span class="label">Valor unitário</span><span class="value" id="sum-unit">—</span></div>
+        <div class="summary-row"><span class="label">Subtotal</span><span class="value" id="sum-subtotal">—</span></div>
+        <div class="summary-row"><span class="label">Entrega</span><span class="value" id="sum-delivery">—</span></div>
+        <div class="summary-row total"><span class="label">Total</span><span class="value" id="sum-total">—</span></div>
+      </div>
+    </div>
+
+  </div>
+  <div class="drawer-footer">
+    <button class="btn-finalize" id="btn-finalize" type="button">Finalizar Compra</button>
+  </div>
+</aside>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- DADOS (fonte única, sem duplicação) ---------- */
+  var WHATSAPP_NUMBER = "5521966281152";
+
+  // Caminhos das imagens por sabor. Por enquanto todas usam a mesma foto
+  // temporária (Frango com Catupiry) — troque cada caminho individualmente
+  // assim que tiver a foto real de cada pizza (ex.: "./assets/Calabresa.png").
+  var pizzaImages = {
+    "Frango com Catupiry": "./assets/FrangoCatupiry.png",
+    "Calabresa": "./assets/FrangoCatupiry.png",
+    "4 Queijos": "./assets/FrangoCatupiry.png",
+    "Bacon": "./assets/FrangoCatupiry.png",
+    "Alho Torrado": "./assets/FrangoCatupiry.png",
+    "Mussarela": "./assets/FrangoCatupiry.png",
+    "Queijo com Presunto": "./assets/FrangoCatupiry.png",
+    "Provolone": "./assets/FrangoCatupiry.png",
+    "Calabresa com Cheddar": "./assets/FrangoCatupiry.png",
+    "Chocolate": "./assets/FrangoCatupiry.png"
+  };
+
+  var PIZZAS = [
+    { name:"Frango com Catupiry", desc:"Frango desfiado, catupiry cremoso e mussarela." },
+    { name:"Calabresa", desc:"Calabresa fatiada, cebola roxa e mussarela derretida." },
+    { name:"4 Queijos", desc:"Mussarela, provolone, parmesão e catupiry." },
+    { name:"Bacon", desc:"Bacon crocante, mussarela e toque de orégano." },
+    { name:"Alho Torrado", desc:"Mussarela coberta com alho torrado na manteiga." },
+    { name:"Mussarela", desc:"A clássica: fatias generosas de mussarela e orégano." },
+    { name:"Queijo com Presunto", desc:"Presunto fatiado com muita mussarela derretida." },
+    { name:"Provolone", desc:"Provolone defumado derretido com orégano fresco." },
+    { name:"Calabresa com Cheddar", desc:"Calabresa fatiada com molho cheddar cremoso." },
+    { name:"Chocolate", desc:"Chocolate ao leite derretido com granulado crocante." }
+  ];
+
+  var PRICE_OPTIONS = {
+    varejo: [
+      { id:"sem-assar", title:"Sem assar", sub:"30 cm · Dinheiro ou Pix", price:13, qtyLabel:"Quantidade de pizzas por sabor selecionado." },
+      { id:"assada", title:"Assada", sub:"30 cm · Dinheiro ou Pix", price:15, qtyLabel:"Quantidade de pizzas por sabor selecionado." }
+    ],
+    atacado: [
+      { id:"lote-30", title:"Lote de 20 unidades", sub:"30 cm · R$ 12,00 cada unidade", price:12, unitsPerLot:20, qtyLabel:"Quantidade de lotes (20 un.) por sabor selecionado." },
+      { id:"lote-20", title:"Lote de 20 unidades", sub:"20 cm · R$ 5,50 cada unidade", price:5.5, unitsPerLot:20, qtyLabel:"Quantidade de lotes (20 un.) por sabor selecionado." }
+    ]
+  };
+
+  /* ---------- ESTADO ---------- */
+  var state = {
+    pizza: null,
+    category: "varejo",
+    quantity: 1,
+    flavors: [],
+    delivery: null,
+    priceOptionId: PRICE_OPTIONS.varejo[0].id
+  };
+  var lastFocusedTrigger = null;
+
+  /* ---------- HELPERS ---------- */
+  function formatBRL(n){
+    return "R$ " + n.toFixed(2).replace(".", ",");
+  }
+  function currentPriceOption(){
+    var list = PRICE_OPTIONS[state.category];
+    var found = list.filter(function(o){ return o.id === state.priceOptionId; })[0];
+    return found || list[0];
+  }
+  // Multiplicador central: quantidade por sabor × número de sabores selecionados.
+  // Ex.: 4 sabores × 4 unidades = 16 pizzas (ou 16 lotes, no atacado).
+  function totalMultiplier(){
+    return state.quantity * state.flavors.length;
+  }
+  // Total de pizzas físicas (no atacado, cada lote tem 20 unidades).
+  function totalPizzas(){
+    var opt = currentPriceOption();
+    var mult = totalMultiplier();
+    return state.category === "atacado" ? mult * opt.unitsPerLot : mult;
+  }
+  function calcSubtotal(){
+    var opt = currentPriceOption();
+    var mult = totalMultiplier();
+    if(state.category === "atacado"){
+      return opt.price * opt.unitsPerLot * mult;
+    }
+    return opt.price * mult;
+  }
+
+  /* ---------- RENDER: CARDÁPIO ---------- */
+  function renderMenu(){
+    var grid = document.getElementById("menu-grid");
+    var html = PIZZAS.map(function(p){
+      return (
+        '<article class="menu-card">' +
+          '<div class="menu-card-media"><img src="' + pizzaImages[p.name] + '" alt="Pizza ' + p.name + '" loading="lazy"></div>' +
+          '<div class="menu-card-content">' +
+            '<h3>' + p.name + '</h3>' +
+            '<p>' + p.desc + '</p>' +
+            '<div class="menu-card-actions">' +
+              '<button type="button" class="btn-buy varejo" data-pizza="' + p.name + '" data-category="varejo">Comprar no Varejo</button>' +
+              '<button type="button" class="btn-buy atacado" data-pizza="' + p.name + '" data-category="atacado">Comprar no Atacado</button>' +
+            '</div>' +
+          '</div>' +
+        '</article>'
+      );
+    }).join("");
+    grid.innerHTML = html;
+    grid.addEventListener("click", function(e){
+      var btn = e.target.closest(".btn-buy");
+      if(!btn) return;
+      var pizza = PIZZAS.filter(function(p){ return p.name === btn.dataset.pizza; })[0];
+      openDrawer(pizza, btn.dataset.category, btn);
+    });
+  }
+
+  /* ---------- RENDER: SABORES (multiselect) ---------- */
+  function renderFlavors(){
+    var grid = document.getElementById("flavor-grid");
+    grid.innerHTML = PIZZAS.map(function(p){
+      return (
+        '<label class="flavor-check" data-flavor="' + p.name + '">' +
+          '<input type="checkbox" value="' + p.name + '">' +
+          '<img class="flavor-check-img" src="' + pizzaImages[p.name] + '" alt="">' +
+          '<span>' + p.name + '</span>' +
+        '</label>'
+      );
+    }).join("");
+    grid.addEventListener("change", function(e){
+      if(e.target.type !== "checkbox") return;
+      var name = e.target.value;
+      var label = e.target.closest(".flavor-check");
+      if(e.target.checked){
+        if(state.flavors.indexOf(name) === -1) state.flavors.push(name);
+        label.classList.add("checked");
+      } else {
+        state.flavors = state.flavors.filter(function(f){ return f !== name; });
+        label.classList.remove("checked");
+      }
+      updateSummary();
+    });
+  }
+
+  /* ---------- RENDER: PREÇOS (varejo/atacado) ---------- */
+  function renderPriceOptions(){
+    var group = document.getElementById("price-group");
+    var list = PRICE_OPTIONS[state.category];
+    document.getElementById("price-block-title").textContent =
+      "Preço — " + (state.category === "varejo" ? "Varejo" : "Atacado");
+
+    group.innerHTML = list.map(function(o){
+      var checked = o.id === state.priceOptionId ? "checked" : "";
+      var priceLabel = state.category === "atacado"
+        ? formatBRL(o.price) + " / un."
+        : formatBRL(o.price);
+      return (
+        '<label class="price-card' + (checked ? ' checked' : '') + '" data-id="' + o.id + '">' +
+          '<span class="price-card-left">' +
+            '<input type="radio" name="price-option" value="' + o.id + '" ' + checked + '>' +
+            '<span>' +
+              '<span class="price-card-title">' + o.title + '</span><br>' +
+              '<span class="price-card-sub">' + o.sub + '</span>' +
+            '</span>' +
+          '</span>' +
+          '<span class="price-card-amount">' + priceLabel + '</span>' +
+        '</label>'
+      );
+    }).join("");
+
+    Array.prototype.forEach.call(group.querySelectorAll(".price-card"), function(card){
+      card.addEventListener("click", function(){
+        state.priceOptionId = card.dataset.id;
+        Array.prototype.forEach.call(group.querySelectorAll(".price-card"), function(c){
+          c.classList.toggle("checked", c === card);
+          c.querySelector("input").checked = (c === card);
+        });
+        var opt = currentPriceOption();
+        document.getElementById("qty-hint").textContent = opt.qtyLabel;
+        updateSummary();
+      });
+    });
+
+    document.getElementById("qty-hint").textContent = currentPriceOption().qtyLabel;
+  }
+
+  /* ---------- ENTREGA ---------- */
+  function setupDelivery(){
+    var group = document.getElementById("delivery-group");
+    Array.prototype.forEach.call(group.querySelectorAll(".radio-card"), function(card){
+      card.addEventListener("click", function(){
+        state.delivery = card.dataset.value;
+        Array.prototype.forEach.call(group.querySelectorAll(".radio-card"), function(c){
+          c.classList.toggle("checked", c === card);
+          c.querySelector("input").checked = (c === card);
+        });
+        updateSummary();
+      });
+    });
+  }
+
+  /* ---------- QUANTIDADE ---------- */
+  function setupQuantity(){
+    document.getElementById("qty-minus").addEventListener("click", function(){
+      if(state.quantity > 1){ state.quantity--; refreshQtyDisplay(); updateSummary(); }
+    });
+    document.getElementById("qty-plus").addEventListener("click", function(){
+      state.quantity++; refreshQtyDisplay(); updateSummary();
+    });
+  }
+  function refreshQtyDisplay(){
+    document.getElementById("qty-value").textContent = state.quantity;
+  }
+
+  /* ---------- RESUMO ---------- */
+  function updateSummary(){
+    var opt = currentPriceOption();
+    var subtotal = calcSubtotal();
+    var deliveryLabel = state.delivery === "uber" ? "Uber Flash (frete a calcular)"
+                        : state.delivery === "retirada" ? "Retirada na loja"
+                        : "Não selecionada";
+    var unitNoun = state.category === "atacado" ? "lote(s)" : "pizza(s)";
+
+    document.getElementById("sum-flavors").textContent = state.flavors.length
+      ? state.flavors.join(", ") + " (" + state.flavors.length + ")"
+      : "Nenhum selecionado";
+    document.getElementById("sum-qty").textContent = state.quantity + " " + unitNoun;
+    document.getElementById("sum-total-units").textContent = totalPizzas() + " pizza(s)";
+    document.getElementById("sum-type").textContent = state.category === "varejo" ? "Varejo" : "Atacado";
+    document.getElementById("sum-unit").textContent = state.category === "atacado"
+      ? formatBRL(opt.price) + " / un."
+      : formatBRL(opt.price);
+    document.getElementById("sum-subtotal").textContent = formatBRL(subtotal);
+    document.getElementById("sum-delivery").textContent = deliveryLabel;
+    document.getElementById("sum-total").textContent = formatBRL(subtotal);
+
+    var finalizeBtn = document.getElementById("btn-finalize");
+    finalizeBtn.disabled = !state.delivery || state.flavors.length === 0;
+  }
+
+  /* ---------- MENSAGEM WHATSAPP ---------- */
+  function buildWhatsAppMessage(){
+    var tipo = state.category === "varejo" ? "Varejo" : "Atacado";
+    var sabores = state.flavors.length
+      ? state.flavors.map(function(f){ return "• " + f; }).join("\n")
+      : "• (nenhum selecionado)";
+    var entrega = state.delivery === "uber" ? "Uber Flash" : state.delivery === "retirada" ? "Retirada" : "(não selecionada)";
+    var valor = calcSubtotal().toFixed(2).replace(".", ",");
+    var unitNoun = state.category === "atacado" ? "lote(s)" : "unidade(s)";
+    var quantidadeTexto = state.quantity + " " + unitNoun + " por sabor × " + state.flavors.length +
+      " sabor(es) = " + totalPizzas() + " pizzas no total";
+
+    return "Olá! Gostaria de fazer um pedido.\n\n" +
+      "Tipo:\n" + tipo + "\n\n" +
+      "Sabores:\n" + sabores + "\n\n" +
+      "Quantidade:\n" + quantidadeTexto + "\n\n" +
+      "Forma de entrega:\n" + entrega + "\n\n" +
+      "Valor estimado:\nR$ " + valor + "\n\n" +
+      "Obrigado!";
+  }
+
+  function setupFinalize(){
+    document.getElementById("btn-finalize").addEventListener("click", function(){
+      if(this.disabled) return;
+      var message = buildWhatsAppMessage();
+      var url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message);
+      window.open(url, "_blank", "noopener");
+    });
+  }
+
+  /* ---------- DRAWER: abrir / fechar / foco ---------- */
+  var focusableSelector = 'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])';
+
+  function openDrawer(pizza, category, trigger){
+    lastFocusedTrigger = trigger || null;
+    state.pizza = pizza;
+    state.category = category;
+    state.quantity = 1;
+    state.flavors = [];
+    state.delivery = null;
+    state.priceOptionId = PRICE_OPTIONS[category][0].id;
+
+    var img = document.getElementById("drawer-pizza-img");
+    img.src = pizzaImages[pizza.name];
+    img.alt = "Pizza " + pizza.name;
+    document.getElementById("drawer-pizza-name").textContent = pizza.name;
+    document.getElementById("drawer-pizza-cat").textContent = category === "varejo" ? "Varejo" : "Atacado";
+
+    Array.prototype.forEach.call(document.querySelectorAll("#flavor-grid input"), function(cb){
+      cb.checked = false;
+      cb.closest(".flavor-check").classList.remove("checked");
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("#delivery-group .radio-card"), function(c){
+      c.classList.remove("checked");
+      c.querySelector("input").checked = false;
+    });
+
+    refreshQtyDisplay();
+    renderPriceOptions();
+    updateSummary();
+
+    var overlay = document.getElementById("drawer-overlay");
+    var drawer = document.getElementById("drawer");
+    overlay.classList.add("open");
+
+    if(window.gsap){
+      gsap.to(drawer, { x: 0, duration: 0.45, ease: "power3.out" });
+    } else {
+      drawer.style.transform = "translateX(0)";
+    }
+
+    document.body.style.overflow = "hidden";
+    drawer.focus();
+    document.addEventListener("keydown", onDrawerKeydown);
+  }
+
+  function closeDrawer(){
+    var overlay = document.getElementById("drawer-overlay");
+    var drawer = document.getElementById("drawer");
+    overlay.classList.remove("open");
+
+    if(window.gsap){
+      gsap.to(drawer, { x: "100%", duration: 0.35, ease: "power2.in" });
+    } else {
+      drawer.style.transform = "translateX(100%)";
+    }
+
+    document.body.style.overflow = "";
+    document.removeEventListener("keydown", onDrawerKeydown);
+    if(lastFocusedTrigger) lastFocusedTrigger.focus();
+  }
+
+  function onDrawerKeydown(e){
+    var drawer = document.getElementById("drawer");
+    if(e.key === "Escape"){
+      closeDrawer();
+      return;
+    }
+    if(e.key === "Tab"){
+      var focusables = Array.prototype.slice.call(drawer.querySelectorAll(focusableSelector))
+        .filter(function(el){ return el.offsetParent !== null; });
+      if(focusables.length === 0) return;
+      var first = focusables[0];
+      var last = focusables[focusables.length - 1];
+      if(e.shiftKey && document.activeElement === first){
+        e.preventDefault(); last.focus();
+      } else if(!e.shiftKey && document.activeElement === last){
+        e.preventDefault(); first.focus();
+      }
+    }
+  }
+
+  function setupDrawerChrome(){
+    document.getElementById("drawer-close").addEventListener("click", closeDrawer);
+    document.getElementById("drawer-overlay").addEventListener("click", closeDrawer);
+  }
+
+  /* ---------- REVENDEDOR ---------- */
+  function setupRevendedor(){
+    var msg = "Olá!\nTenho interesse em me tornar um revendedor das pizzas.\nGostaria de receber mais informações sobre preços, condições e como funciona a parceria.";
+    var link = document.getElementById("btn-revendedor");
+    link.href = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(msg);
+  }
+
+  /* ---------- ANIMAÇÕES GSAP ---------- */
+  function setupAnimations(){
+    if(!window.gsap) return;
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.set("[data-anim='hero']", { opacity: 0, scale: 0.96 });
+    gsap.to("[data-anim='hero']", { opacity: 1, scale: 1, duration: 0.9, ease: "power2.out" });
+
+    Array.prototype.forEach.call(document.querySelectorAll("[data-anim='section-title']"), function(el){
+      gsap.fromTo(el,
+        { opacity: 0, y: 24 },
+        { opacity: 1, y: 0, duration: 0.7, ease: "power2.out",
+          scrollTrigger: { trigger: el, start: "top 82%" } }
+      );
+    });
+
+    Array.prototype.forEach.call(document.querySelectorAll("[data-anim='cards']"), function(container){
+      var cards = container.children;
+      gsap.fromTo(cards,
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", stagger: 0.08,
+          scrollTrigger: { trigger: container, start: "top 85%" } }
+      );
+    });
+
+    gsap.fromTo("[data-anim='footer']",
+      { opacity: 0 },
+      { opacity: 1, duration: 0.8, ease: "power1.out",
+        scrollTrigger: { trigger: "[data-anim='footer']", start: "top 95%" } }
+    );
+  }
+
+  /* ---------- INIT ---------- */
+  document.addEventListener("DOMContentLoaded", function(){
+    document.getElementById("footer-year").textContent = new Date().getFullYear();
+    renderMenu();
+    renderFlavors();
+    setupDelivery();
+    setupQuantity();
+    setupFinalize();
+    setupDrawerChrome();
+    setupRevendedor();
+    setupAnimations();
+  });
+
+})();
+</script>
+</body>
+</html>
