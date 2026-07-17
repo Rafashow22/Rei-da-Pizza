@@ -53,7 +53,7 @@
   .brand-name{font-weight:800;font-size:21px;color:var(--gold);letter-spacing:.3px;white-space:nowrap}
   .main-nav{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
   .main-nav a{text-decoration:none;font-weight:600;font-size:15px;color:var(--cream)}
-  .btn-pill{;background:var(--gold);color:#5A1010;text-decoration:none;font-weight:700;font-size:14px;padding:10px 20px;border-radius:999px;box-shadow:0 3px 0 var(--gold-shadow);border:none;cursor:pointer;display:inline-block}
+  .btn-pill{background:var(--gold);color:#5A1010;text-decoration:none;font-weight:700;font-size:14px;padding:10px 20px;border-radius:999px;box-shadow:0 3px 0 var(--gold-shadow);border:none;cursor:pointer;display:inline-block}
   .btn-pill:hover{transform:translateY(-1px)}
   a.btn-pill{display:none;}
 
@@ -154,6 +154,9 @@
   .qty-btn{background:var(--red-dark);color:var(--cream);border:none;width:38px;height:38px;font-size:18px;cursor:pointer;font-weight:700}
   .qty-btn:hover{background:var(--red-accent)}
   .qty-value{min-width:44px;text-align:center;font-weight:700;font-size:16px;color:var(--red-dark)}
+  input.qty-value{border:none;background:transparent;font-family:inherit;padding:0;-moz-appearance:textfield}
+  input.qty-value::-webkit-outer-spin-button,input.qty-value::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  input.qty-value:focus{outline:2px solid var(--gold);outline-offset:-2px;border-radius:4px}
   .flavor-check-img{width:24px;height:24px;border-radius:50%;object-fit:cover;flex-shrink:0}
   .radio-card{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid #E4CBB2;border-radius:12px;cursor:pointer;margin-bottom:10px;background:#fff}
   .radio-card input{margin-top:3px;accent-color:var(--red-accent);width:16px;height:16px;flex-shrink:0}
@@ -395,7 +398,12 @@
       <div class="footer-col-title">Contato</div>
       <div class="footer-links">
         <a href="https://wa.me/5521966281152?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20falar%20com%20o%20Rei%20da%20Pizza." target="_blank" rel="noopener">WhatsApp: (21) 96628-1152</a>
-        <span>Seg a Dom · 18h às 00h</span>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Horário de Funcionamento</div>
+      <div class="footer-links">
+        <span id="footer-hours"></span>
       </div>
     </div>
   </div>
@@ -439,6 +447,7 @@
           <input type="radio" name="delivery" value="retirada">
           <span>
             <span class="radio-title">Retirada na loja</span>
+            <span class="radio-sub" id="retirada-address-note"></span>
           </span>
         </label>
       </div>
@@ -516,6 +525,8 @@
 
   /* ---------- DADOS (fonte única, sem duplicação) ---------- */
   var WHATSAPP_NUMBER = "5521966281152";
+  var COMPANY_ADDRESS = "Estrada do Portela, 504 — Madureira";
+  var BUSINESS_HOURS = "Segunda a sábado, das 7h às 17h";
 
   // Caminhos das imagens por sabor. Por enquanto todas usam a mesma foto
   // temporária (Frango com Catupiry) — troque cada caminho individualmente
@@ -723,12 +734,22 @@
           '<span class="flavor-qty-name"><img class="flavor-check-img" src="' + pizzaImages[p.name] + '" alt="">' + p.name + '</span>' +
           '<span class="qty-stepper">' +
             '<button type="button" class="qty-btn" data-flavor="' + p.name + '" data-action="dec" aria-label="Diminuir ' + p.name + '">−</button>' +
-            '<span class="qty-value" aria-live="polite">' + qty + '</span>' +
+            '<input type="number" inputmode="numeric" min="0" step="1" class="qty-value" data-flavor="' + p.name + '" value="' + qty + '" aria-label="Quantidade de ' + p.name + '">' +
             '<button type="button" class="qty-btn" data-flavor="' + p.name + '" data-action="inc" aria-label="Aumentar ' + p.name + '">+</button>' +
           '</span>' +
         '</div>'
       );
     }).join("");
+  }
+
+  // Atualiza só o valor de subtotal exibido dentro de um bloco do carrinho,
+  // sem recriar o HTML do bloco — usado durante a digitação da quantidade
+  // para não fazer o campo perder o foco a cada tecla.
+  function updateItemSubtotalDisplay(item){
+    var cartItemEl = document.querySelector('.cart-item[data-item-id="' + item.id + '"]');
+    if(!cartItemEl) return;
+    var subtotalValueEl = cartItemEl.querySelector(".cart-item-subtotal span:last-child");
+    if(subtotalValueEl) subtotalValueEl.textContent = formatBRL(itemSubtotal(item));
   }
 
   // Re-renderiza o carrinho inteiro a partir de state.items — única função
@@ -781,6 +802,39 @@
         state.items = state.items.filter(function(it){ return it.id !== removeBtn.dataset.itemId; });
         renderItems();
         updateSummary();
+      }
+    });
+
+    // Digitação direta da quantidade: atualiza o estado a cada tecla, mas
+    // só atualiza o subtotal do bloco e o resumo — sem recriar o grid — para
+    // o campo não perder o foco enquanto o cliente ainda está digitando.
+    container.addEventListener("input", function(e){
+      var input = e.target.closest(".qty-value");
+      if(!input || input.tagName !== "INPUT") return;
+      var grid = input.closest(".flavor-qty-grid");
+      var item = findItem(grid.dataset.itemId);
+      var name = input.dataset.flavor;
+      var parsed = parseInt(input.value, 10);
+      var qty = isNaN(parsed) || parsed < 0 ? 0 : parsed;
+      item.quantidade[name] = qty;
+      input.closest(".flavor-qty-row").classList.toggle("active", qty > 0);
+      updateItemSubtotalDisplay(item);
+      updateSummary();
+    });
+
+    // Ao sair do campo (ou apertar Enter), normaliza o valor digitado e
+    // reconstrói o bloco normalmente — mesmo caminho usado pelos botões +/-.
+    container.addEventListener("change", function(e){
+      var input = e.target.closest(".qty-value");
+      if(!input || input.tagName !== "INPUT") return;
+      renderItems();
+      updateSummary();
+    });
+
+    container.addEventListener("keydown", function(e){
+      if(e.key === "Enter" && e.target.closest(".qty-value")){
+        e.preventDefault();
+        e.target.blur();
       }
     });
   }
@@ -885,7 +939,9 @@
     var entrega = state.entrega.forma === "uber" ? "Uber Flash"
                 : state.entrega.forma === "retirada" ? "Retirada na loja"
                 : "(não selecionada)";
-    var endereco = state.cliente.endereco.trim() || "(retirada na loja)";
+    var endereco = state.entrega.forma === "retirada"
+      ? "Retirada na loja — " + COMPANY_ADDRESS
+      : (state.cliente.endereco.trim() || "(endereço não informado)");
     var valorTotal = cartTotal().toFixed(2).replace(".", ",");
 
     return "Olá!\n\nGostaria de fazer um pedido.\n\n" +
@@ -895,7 +951,8 @@
       "Forma de entrega\n" + entrega + "\n\n" +
       "Endereço\n" + endereco + "\n\n" +
       "Total de pizzas\n" + cartTotalPizzas() + "\n\n" +
-      "Valor Total\nR$ " + valorTotal;
+      "Valor Total\nR$ " + valorTotal + "\n\n" +
+      "Horário de Funcionamento\n" + BUSINESS_HOURS;
   }
 
   function setupFinalize(){
@@ -988,6 +1045,14 @@
   function setupDrawerChrome(){
     document.getElementById("drawer-close").addEventListener("click", closeDrawer);
     document.getElementById("drawer-overlay").addEventListener("click", closeDrawer);
+  }
+
+  /* ---------- INFORMAÇÕES DA LOJA (endereço e horário) ----------
+     Fonte única (COMPANY_ADDRESS / BUSINESS_HOURS) usada tanto na página
+     quanto na mensagem do WhatsApp, para nunca ficarem desalinhados. */
+  function setupBusinessInfo(){
+    document.getElementById("footer-hours").textContent = BUSINESS_HOURS;
+    document.getElementById("retirada-address-note").textContent = COMPANY_ADDRESS;
   }
 
   /* ---------- MODAL REVENDEDOR ---------- */
@@ -1140,6 +1205,7 @@
   /* ---------- INIT ---------- */
   document.addEventListener("DOMContentLoaded", function(){
     document.getElementById("footer-year").textContent = new Date().getFullYear();
+    setupBusinessInfo();
     renderMenu();
     setupDelivery();
     setupItemsContainer();
