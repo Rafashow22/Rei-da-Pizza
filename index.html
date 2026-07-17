@@ -146,7 +146,6 @@
   .drawer-pizza{display:flex;align-items:center;gap:14px;margin-bottom:20px}
   .drawer-pizza-media{width:60px;height:60px;border-radius:14px;overflow:hidden;flex-shrink:0;background:var(--red-card)}
   .drawer-pizza-media img{width:100%;height:100%;object-fit:cover}
-  .drawer-pizza-name{font-weight:700;font-size:17px;color:var(--red-dark)}
   .drawer-pizza-cat{display:inline-block;margin-top:4px;font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--red-accent);background:rgba(200,30,30,.1);padding:3px 10px;border-radius:999px}
   .drawer-block{margin-bottom:24px}
   .drawer-block-title{font-weight:700;font-size:13.5px;color:var(--red-dark);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
@@ -154,12 +153,7 @@
   .qty-btn{background:var(--red-dark);color:var(--cream);border:none;width:38px;height:38px;font-size:18px;cursor:pointer;font-weight:700}
   .qty-btn:hover{background:var(--red-accent)}
   .qty-value{min-width:44px;text-align:center;font-weight:700;font-size:16px;color:var(--red-dark)}
-  .qty-hint{font-size:12px;color:var(--brown-muted);margin-top:8px}
-  .flavor-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  .flavor-check{display:flex;align-items:center;gap:8px;font-size:13px;padding:7px 9px;border:1px solid #E4CBB2;border-radius:10px;cursor:pointer;background:#fff}
-  .flavor-check input{accent-color:var(--red-accent);width:16px;height:16px;flex-shrink:0}
   .flavor-check-img{width:24px;height:24px;border-radius:50%;object-fit:cover;flex-shrink:0}
-  .flavor-check.checked{border-color:var(--red-accent);background:rgba(200,30,30,.06)}
   .radio-card{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid #E4CBB2;border-radius:12px;cursor:pointer;margin-bottom:10px;background:#fff}
   .radio-card input{margin-top:3px;accent-color:var(--red-accent);width:16px;height:16px;flex-shrink:0}
   .radio-card.checked{border-color:var(--red-accent);background:rgba(200,30,30,.06)}
@@ -177,10 +171,25 @@
   .customer-input:last-child{margin-bottom:0}
   .customer-input:focus{border-color:var(--red-accent)}
   .customer-textarea{resize:vertical;min-height:56px}
-  .atacado-flavor-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;border:1px solid #E4CBB2;border-radius:10px;margin-bottom:8px;background:#fff}
-  .atacado-flavor-row.active{border-color:var(--red-accent);background:rgba(200,30,30,.06)}
-  .atacado-flavor-name{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:var(--text-dark)}
-  .atacado-warning{color:var(--red-accent);font-size:12.5px;font-weight:600;margin-top:10px}
+  .cart-item{border:1px solid #E4CBB2;border-radius:14px;padding:14px;margin-bottom:14px;background:#FBF3E7}
+  .cart-item-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+  .cart-item-title{font-weight:700;font-size:14.5px;color:var(--red-dark)}
+  .cart-item-remove{background:none;border:none;color:var(--red-accent);font-size:12.5px;font-weight:700;cursor:pointer;padding:4px 6px}
+  .cart-item-remove:hover{text-decoration:underline}
+  .cart-item-subtitle{margin-top:14px}
+  .cart-item-subtotal{display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--red-dark);margin-top:12px;padding-top:10px;border-top:1px dashed #E4CBB2}
+  .btn-add-size{width:100%;background:transparent;color:var(--red-accent);border:2px dashed var(--red-accent);border-radius:12px;padding:12px;font-weight:700;font-size:13.5px;cursor:pointer;margin-top:4px}
+  .btn-add-size:hover{background:rgba(200,30,30,.06)}
+  .summary-items{margin:4px 0}
+  .summary-item{padding:10px 0;border-bottom:1px dashed rgba(245,215,122,.2)}
+  .summary-item:last-child{border-bottom:none}
+  .summary-item-title{font-weight:700;color:var(--gold);font-size:13px;margin-bottom:4px}
+  .summary-item-flavors{font-size:12.5px;color:#D8B8A0;line-height:1.6}
+  .summary-item-subtotal{display:flex;justify-content:space-between;font-size:12.5px;font-weight:600;margin-top:6px;color:var(--cream)}
+  .flavor-qty-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;border:1px solid #E4CBB2;border-radius:10px;margin-bottom:8px;background:#fff}
+  .flavor-qty-row.active{border-color:var(--red-accent);background:rgba(200,30,30,.06)}
+  .flavor-qty-name{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:var(--text-dark)}
+  .min-warning{color:var(--red-accent);font-size:12.5px;font-weight:600;margin-top:10px}
   .summary-box{background:var(--red-deep);border-radius:16px;padding:18px 18px 8px;color:var(--cream)}
   .summary-row{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:8px 0;border-bottom:1px dashed rgba(245,215,122,.2)}
   .summary-row .label{color:#D8B8A0}
@@ -220,7 +229,6 @@
 
     .feature,.menu-section,.reviews-section,.contact-section{padding:48px 6vw}
     .menu-grid,.reviews-grid{grid-template-columns:1fr}
-    .flavor-grid{grid-template-columns:1fr}
 
     .footer-top{flex-direction:column;gap:28px}
 
@@ -255,11 +263,11 @@
 <section class="hero" data-anim="hero">
   <div class="hero-copy">
     <div class="eyebrow-pill">👑 A pizzaria mais rápida da região</div>
-    <h1>A pizza mais rápida da cidade,<br>com sabor de <span>rei</span>.</h1>
-    <p>10 sabores campeões, no varejo ou no atacado. Escolha, monte seu pedido e receba pelo WhatsApp em poucos passos.</p>
+    <h1>A maior fábrica de pizza do <span>Rio de Janeiro</span></h1>
+    <p>Preço baixo, qualidade, garantia de satisfação porque você merece o melhor e nós temos o melhor para te oferecer.</p>
     <div class="hero-actions" id="hero-actions">
-      <button type="button" class="btn-buy varejo" data-category="varejo">Comprar no Varejo</button>
-      <button type="button" class="btn-buy atacado" data-category="atacado">Comprar no Atacado</button>
+      <button type="button" class="btn-buy varejo" data-category="varejo">Quero Saborear</button>
+      <button type="button" class="btn-buy atacado" data-category="atacado">Quero Revender</button>
     </div>
   </div>
   <div class="hero-art">
@@ -385,7 +393,7 @@
 <div class="drawer-overlay" id="drawer-overlay"></div>
 <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" tabindex="-1">
   <div class="drawer-header">
-    <h3 id="drawer-title">Montar pedido</h3>
+    <h3 id="drawer-title">Faça seu pedido</h3>
     <button class="drawer-close" id="drawer-close" aria-label="Fechar pedido">✕</button>
   </div>
   <div class="drawer-body">
@@ -393,30 +401,15 @@
     <div class="drawer-pizza">
       <div class="drawer-pizza-media"><img id="drawer-pizza-img" src="" alt=""></div>
       <div>
-        <div class="drawer-pizza-name" id="drawer-pizza-name">—</div>
-        <span class="drawer-pizza-cat" id="drawer-pizza-cat">Varejo</span>
+        <span class="drawer-pizza-cat" id="drawer-pizza-cat">Quero Saborear</span>
       </div>
     </div>
 
-    <div class="drawer-block" id="block-quantidade">
-      <div class="drawer-block-title">Quantidade</div>
-      <div class="qty-stepper">
-        <button class="qty-btn" id="qty-minus" type="button" aria-label="Diminuir quantidade">−</button>
-        <span class="qty-value" id="qty-value" aria-live="polite">1</span>
-        <button class="qty-btn" id="qty-plus" type="button" aria-label="Aumentar quantidade">+</button>
-      </div>
-      <p class="qty-hint" id="qty-hint">Quantidade por sabor selecionado.</p>
-    </div>
-
-    <div class="drawer-block" id="block-sabores-varejo">
-      <div class="drawer-block-title">Sabores</div>
-      <div class="flavor-grid" id="flavor-grid" role="group" aria-label="Selecione os sabores"></div>
-    </div>
-
-    <div class="drawer-block" id="block-sabores-atacado" hidden>
-      <div class="drawer-block-title">Sabores (mínimo 20 pizzas no total)</div>
-      <div id="wholesale-flavor-grid" role="group" aria-label="Quantidade por sabor"></div>
-      <p class="atacado-warning" id="atacado-warning" role="alert" hidden>O pedido mínimo para atacado é de 20 pizzas.</p>
+    <div class="drawer-block">
+      <div class="drawer-block-title">Pedido</div>
+      <div id="items-container"></div>
+      <button type="button" class="btn-add-size" id="btn-add-item">+ Adicionar outro tamanho</button>
+      <p class="min-warning" id="min-warning" role="alert" hidden></p>
     </div>
 
     <div class="drawer-block">
@@ -439,11 +432,6 @@
     </div>
 
     <div class="drawer-block">
-      <div class="drawer-block-title" id="price-block-title">Preço — Varejo</div>
-      <div id="price-group" role="radiogroup" aria-labelledby="price-block-title"></div>
-    </div>
-
-    <div class="drawer-block">
       <div class="drawer-block-title">Seus dados</div>
       <label class="customer-field-label" for="customer-name">Nome completo</label>
       <input class="customer-input" type="text" id="customer-name" placeholder="Digite seu nome" required>
@@ -454,14 +442,11 @@
     <div class="drawer-block">
       <div class="drawer-block-title">Resumo</div>
       <div class="summary-box">
-        <div class="summary-row"><span class="label" id="lbl-flavors">Sabores selecionados</span><span class="value" id="sum-flavors">—</span></div>
-        <div class="summary-row"><span class="label" id="lbl-qty">Quantidade por sabor</span><span class="value" id="sum-qty">1</span></div>
-        <div class="summary-row"><span class="label" id="lbl-total-units">Total de pizzas</span><span class="value" id="sum-total-units">—</span></div>
-        <div class="summary-row"><span class="label">Tipo</span><span class="value" id="sum-type">Varejo</span></div>
-        <div class="summary-row"><span class="label">Valor unitário</span><span class="value" id="sum-unit">—</span></div>
-        <div class="summary-row"><span class="label">Subtotal</span><span class="value" id="sum-subtotal">—</span></div>
+        <div class="summary-row"><span class="label">Tipo</span><span class="value" id="sum-type">—</span></div>
+        <div class="summary-items" id="summary-items"></div>
+        <div class="summary-row"><span class="label">Total de pizzas</span><span class="value" id="sum-qty">—</span></div>
         <div class="summary-row"><span class="label">Entrega</span><span class="value" id="sum-delivery">—</span></div>
-        <div class="summary-row total"><span class="label">Total</span><span class="value" id="sum-total">—</span></div>
+        <div class="summary-row total"><span class="label">Valor Total</span><span class="value" id="sum-total">—</span></div>
       </div>
     </div>
 
@@ -507,73 +492,81 @@
     { name:"Chocolate", desc:"Chocolate ao leite derretido com granulado crocante." }
   ];
 
-  var PRICE_OPTIONS = {
-    varejo: [
-      { id:"sem-assar", title:"Sem assar", sub:"30 cm · Dinheiro ou Pix", price:13, qtyLabel:"Quantidade de pizzas por sabor selecionado." },
-      { id:"assada", title:"Assada", sub:"30 cm · Dinheiro ou Pix", price:15, qtyLabel:"Quantidade de pizzas por sabor selecionado." }
-    ],
-    atacado: [
-      { id:"pizza-familia-30", title:"Pizza Família 30cm", sub:"30 cm · Dinheiro ou Pix", price:12 },
-      { id:"pizza-brotinho-20", title:"Pizza Brotinho 20cm", sub:"20 cm · Dinheiro ou Pix", price:5.5 }
-    ]
+  // Tamanhos disponíveis — fonte única de preço, usada por qualquer bloco
+  // do carrinho, em qualquer tipo de pedido (Quero Saborear / Quero Revender).
+  var SIZES = [
+    { id:"familia", title:"Família", sub:"30 cm", price:12 },
+    { id:"brotinho", title:"Brotinho", sub:"20 cm", price:5.5 }
+  ];
+  function sizeById(id){
+    return SIZES.filter(function(s){ return s.id === id; })[0] || SIZES[0];
+  }
+
+  // Rótulos de exibição para cada tipo de pedido.
+  var CATEGORY_LABELS = {
+    varejo: "Quero Saborear",
+    atacado: "Quero Revender"
   };
 
   var ATACADO_MIN_PIZZAS = 20;
 
-  /* ---------- ESTADO ---------- */
+  /* ---------- ESTADO ÚNICO DA APLICAÇÃO (carrinho) ----------
+     state.items é a fonte única de verdade do pedido: cada item é um
+     bloco independente de tamanho + quantidade por sabor. Não existe
+     lógica separada para Família e Brotinho — todo bloco usa exatamente
+     as mesmas funções de render/cálculo, parametrizadas pelo item.
+     Valores derivados (subtotal por item, total de pizzas, total geral)
+     nunca ficam guardados no estado: são sempre calculados na hora a
+     partir de state.items, para nunca ficarem desatualizados. */
   var state = {
-    pizza: null,
-    category: "varejo",
-    quantity: 1,
-    flavors: [],
-    wholesaleQty: {},
-    customerName: "",
-    customerAddress: "",
-    delivery: null,
-    priceOptionId: PRICE_OPTIONS.varejo[0].id
+    tipo: "varejo",
+    items: [],
+    cliente: { nome: "", endereco: "" },
+    entrega: { forma: null }
   };
+  var itemCounter = 0;
   var lastFocusedTrigger = null;
+
+  function createItem(){
+    itemCounter++;
+    return { id: "item-" + itemCounter, tamanho: SIZES[0].id, quantidade: {} };
+  }
+  function findItem(itemId){
+    return state.items.filter(function(it){ return it.id === itemId; })[0];
+  }
 
   /* ---------- HELPERS ---------- */
   function formatBRL(n){
     return "R$ " + n.toFixed(2).replace(".", ",");
   }
-  function currentPriceOption(){
-    var list = PRICE_OPTIONS[state.category];
-    var found = list.filter(function(o){ return o.id === state.priceOptionId; })[0];
-    return found || list[0];
+  function categoryLabel(){
+    return CATEGORY_LABELS[state.tipo];
   }
-  // Multiplicador central do Varejo: quantidade por sabor × número de sabores selecionados.
-  // Ex.: 4 sabores × 4 unidades = 16 pizzas.
-  function totalMultiplier(){
-    return state.quantity * state.flavors.length;
-  }
-  // Soma das quantidades por sabor no Atacado (cada sabor tem seu próprio stepper).
-  function wholesaleTotal(){
+  // Total de pizzas de UM item (soma das quantidades de cada sabor).
+  function itemTotalPizzas(item){
     var sum = 0;
-    PIZZAS.forEach(function(p){ sum += (state.wholesaleQty[p.name] || 0); });
+    PIZZAS.forEach(function(p){ sum += (item.quantidade[p.name] || 0); });
     return sum;
   }
-  // Total de pizzas do pedido, de acordo com o modo atual.
-  function totalPizzas(){
-    return state.category === "atacado" ? wholesaleTotal() : totalMultiplier();
+  // Subtotal de UM item: preço do tamanho × total de pizzas do item.
+  function itemSubtotal(item){
+    return sizeById(item.tamanho).price * itemTotalPizzas(item);
   }
-  function calcSubtotal(){
-    var opt = currentPriceOption();
-    if(state.category === "atacado"){
-      return opt.price * wholesaleTotal();
-    }
-    return opt.price * totalMultiplier();
+  // Total de pizzas do carrinho inteiro — única função usada em resumo e WhatsApp.
+  function cartTotalPizzas(){
+    return state.items.reduce(function(sum, it){ return sum + itemTotalPizzas(it); }, 0);
   }
-  // Validação geral do formulário (dados do cliente + regras de cada modo).
+  // Valor total do carrinho inteiro — única função usada em resumo e WhatsApp.
+  function cartTotal(){
+    return state.items.reduce(function(sum, it){ return sum + itemSubtotal(it); }, 0);
+  }
+  // Validação geral do formulário (dados do cliente + regras do tipo de pedido).
   function isFormValid(){
-    if(!state.customerName.trim()) return false;
-    if(!state.delivery) return false;
-    if(state.delivery === "uber" && !state.customerAddress.trim()) return false;
-    if(state.category === "atacado"){
-      return totalPizzas() >= ATACADO_MIN_PIZZAS;
-    }
-    return state.flavors.length > 0;
+    if(!state.cliente.nome.trim()) return false;
+    if(!state.entrega.forma) return false;
+    if(state.entrega.forma === "uber" && !state.cliente.endereco.trim()) return false;
+    if(state.tipo === "atacado" && cartTotalPizzas() < ATACADO_MIN_PIZZAS) return false;
+    return cartTotalPizzas() > 0;
   }
 
   /* ---------- RENDER: CARDÁPIO ---------- */
@@ -587,8 +580,8 @@
             '<h3>' + p.name + '</h3>' +
             '<p>' + p.desc + '</p>' +
             '<div class="menu-card-actions">' +
-              '<button type="button" class="btn-buy varejo" data-pizza="' + p.name + '" data-category="varejo">Comprar no Varejo</button>' +
-              '<button type="button" class="btn-buy atacado" data-pizza="' + p.name + '" data-category="atacado">Comprar no Atacado</button>' +
+              '<button type="button" class="btn-buy varejo" data-pizza="' + p.name + '" data-category="varejo">' + CATEGORY_LABELS.varejo + '</button>' +
+              '<button type="button" class="btn-buy atacado" data-pizza="' + p.name + '" data-category="atacado">' + CATEGORY_LABELS.atacado + '</button>' +
             '</div>' +
           '</div>' +
         '</article>'
@@ -616,41 +609,54 @@
     heroActions.addEventListener("click", onBuyClick);
   }
 
-  /* ---------- RENDER: SABORES (multiselect) ---------- */
-  function renderFlavors(){
-    var grid = document.getElementById("flavor-grid");
-    grid.innerHTML = PIZZAS.map(function(p){
+  /* ---------- RENDER: ITENS DO CARRINHO ----------
+     Um único template de bloco (tamanho + sabores + subtotal), reutilizado
+     para qualquer quantidade de itens. Nenhuma lógica é duplicada entre
+     "Família" e "Brotinho": ambos passam pelo mesmo renderItemBlock. */
+  function renderItemBlock(item){
+    var size = sizeById(item.tamanho);
+    var canRemove = state.items.length > 1;
+    return (
+      '<div class="cart-item" data-item-id="' + item.id + '">' +
+        '<div class="cart-item-header">' +
+          '<span class="cart-item-title">' + size.title + ' ' + size.sub + '</span>' +
+          (canRemove ? '<button type="button" class="cart-item-remove" data-item-id="' + item.id + '">Remover</button>' : '') +
+        '</div>' +
+        '<div class="drawer-block-title cart-item-subtitle">Tamanho</div>' +
+        '<div class="size-group" data-item-id="' + item.id + '"></div>' +
+        '<div class="drawer-block-title cart-item-subtitle">Sabores da Pizza ' + size.title + ' (' + size.sub + ')</div>' +
+        '<div class="flavor-qty-grid" data-item-id="' + item.id + '"></div>' +
+        '<div class="cart-item-subtotal"><span>Subtotal</span><span>' + formatBRL(itemSubtotal(item)) + '</span></div>' +
+      '</div>'
+    );
+  }
+
+  function renderItemSizeOptions(item){
+    var el = document.querySelector('.size-group[data-item-id="' + item.id + '"]');
+    el.innerHTML = SIZES.map(function(s){
+      var checked = s.id === item.tamanho ? "checked" : "";
       return (
-        '<label class="flavor-check" data-flavor="' + p.name + '">' +
-          '<input type="checkbox" value="' + p.name + '">' +
-          '<img class="flavor-check-img" src="' + pizzaImages[p.name] + '" alt="">' +
-          '<span>' + p.name + '</span>' +
+        '<label class="price-card' + (checked ? ' checked' : '') + '" data-id="' + s.id + '">' +
+          '<span class="price-card-left">' +
+            '<input type="radio" name="size-option-' + item.id + '" value="' + s.id + '" ' + checked + '>' +
+            '<span>' +
+              '<span class="price-card-title">' + s.title + '</span><br>' +
+              '<span class="price-card-sub">' + s.sub + '</span>' +
+            '</span>' +
+          '</span>' +
+          '<span class="price-card-amount">' + formatBRL(s.price) + ' / un.</span>' +
         '</label>'
       );
     }).join("");
-    grid.addEventListener("change", function(e){
-      if(e.target.type !== "checkbox") return;
-      var name = e.target.value;
-      var label = e.target.closest(".flavor-check");
-      if(e.target.checked){
-        if(state.flavors.indexOf(name) === -1) state.flavors.push(name);
-        label.classList.add("checked");
-      } else {
-        state.flavors = state.flavors.filter(function(f){ return f !== name; });
-        label.classList.remove("checked");
-      }
-      updateSummary();
-    });
   }
 
-  /* ---------- RENDER: SABORES NO ATACADO (stepper por sabor) ---------- */
-  function renderWholesaleFlavors(){
-    var grid = document.getElementById("wholesale-flavor-grid");
-    grid.innerHTML = PIZZAS.map(function(p){
-      var qty = state.wholesaleQty[p.name] || 0;
+  function renderItemFlavorGrid(item){
+    var el = document.querySelector('.flavor-qty-grid[data-item-id="' + item.id + '"]');
+    el.innerHTML = PIZZAS.map(function(p){
+      var qty = item.quantidade[p.name] || 0;
       return (
-        '<div class="atacado-flavor-row' + (qty > 0 ? ' active' : '') + '">' +
-          '<span class="atacado-flavor-name"><img class="flavor-check-img" src="' + pizzaImages[p.name] + '" alt="">' + p.name + '</span>' +
+        '<div class="flavor-qty-row' + (qty > 0 ? ' active' : '') + '">' +
+          '<span class="flavor-qty-name"><img class="flavor-check-img" src="' + pizzaImages[p.name] + '" alt="">' + p.name + '</span>' +
           '<span class="qty-stepper">' +
             '<button type="button" class="qty-btn" data-flavor="' + p.name + '" data-action="dec" aria-label="Diminuir ' + p.name + '">−</button>' +
             '<span class="qty-value" aria-live="polite">' + qty + '</span>' +
@@ -661,76 +667,66 @@
     }).join("");
   }
 
-  function setupWholesaleFlavors(){
-    var grid = document.getElementById("wholesale-flavor-grid");
-    grid.addEventListener("click", function(e){
-      var btn = e.target.closest(".qty-btn");
-      if(!btn) return;
-      var name = btn.dataset.flavor;
-      var current = state.wholesaleQty[name] || 0;
-      if(btn.dataset.action === "inc"){
-        current++;
-      } else if(current > 0){
-        current--;
+  // Re-renderiza o carrinho inteiro a partir de state.items — única função
+  // de render de itens, chamada após qualquer mudança (sabor, tamanho,
+  // adicionar ou remover bloco).
+  function renderItems(){
+    var container = document.getElementById("items-container");
+    container.innerHTML = state.items.map(renderItemBlock).join("");
+    state.items.forEach(function(item){
+      renderItemSizeOptions(item);
+      renderItemFlavorGrid(item);
+    });
+  }
+
+  // Delegação única de eventos para todos os blocos do carrinho — evita
+  // ter que religar listeners a cada re-render e evita duplicar lógica
+  // entre blocos.
+  function setupItemsContainer(){
+    var container = document.getElementById("items-container");
+    container.addEventListener("click", function(e){
+      var sizeCard = e.target.closest(".price-card");
+      if(sizeCard){
+        var sizeGroup = sizeCard.closest(".size-group");
+        var item = findItem(sizeGroup.dataset.itemId);
+        item.tamanho = sizeCard.dataset.id;
+        renderItems();
+        updateSummary();
+        return;
       }
-      state.wholesaleQty[name] = current;
-      renderWholesaleFlavors();
+
+      var qtyBtn = e.target.closest(".qty-btn");
+      if(qtyBtn){
+        var grid = qtyBtn.closest(".flavor-qty-grid");
+        var item2 = findItem(grid.dataset.itemId);
+        var name = qtyBtn.dataset.flavor;
+        var current = item2.quantidade[name] || 0;
+        if(qtyBtn.dataset.action === "inc"){
+          current++;
+        } else if(current > 0){
+          current--;
+        }
+        item2.quantidade[name] = current;
+        renderItems();
+        updateSummary();
+        return;
+      }
+
+      var removeBtn = e.target.closest(".cart-item-remove");
+      if(removeBtn){
+        state.items = state.items.filter(function(it){ return it.id !== removeBtn.dataset.itemId; });
+        renderItems();
+        updateSummary();
+      }
+    });
+  }
+
+  function setupAddItem(){
+    document.getElementById("btn-add-item").addEventListener("click", function(){
+      state.items.push(createItem());
+      renderItems();
       updateSummary();
     });
-  }
-
-  /* ---------- MOSTRA/OCULTA BLOCOS DE ACORDO COM O MODO ---------- */
-  function updateCategoryUI(){
-    var isAtacado = state.category === "atacado";
-    document.getElementById("block-quantidade").hidden = isAtacado;
-    document.getElementById("block-sabores-varejo").hidden = isAtacado;
-    document.getElementById("block-sabores-atacado").hidden = !isAtacado;
-    if(isAtacado) renderWholesaleFlavors();
-  }
-
-  /* ---------- RENDER: PREÇOS (varejo/atacado) ---------- */
-  function renderPriceOptions(){
-    var group = document.getElementById("price-group");
-    var list = PRICE_OPTIONS[state.category];
-    document.getElementById("price-block-title").textContent =
-      "Preço — " + (state.category === "varejo" ? "Varejo" : "Atacado");
-
-    group.innerHTML = list.map(function(o){
-      var checked = o.id === state.priceOptionId ? "checked" : "";
-      var priceLabel = state.category === "atacado"
-        ? formatBRL(o.price) + " / un."
-        : formatBRL(o.price);
-      return (
-        '<label class="price-card' + (checked ? ' checked' : '') + '" data-id="' + o.id + '">' +
-          '<span class="price-card-left">' +
-            '<input type="radio" name="price-option" value="' + o.id + '" ' + checked + '>' +
-            '<span>' +
-              '<span class="price-card-title">' + o.title + '</span><br>' +
-              '<span class="price-card-sub">' + o.sub + '</span>' +
-            '</span>' +
-          '</span>' +
-          '<span class="price-card-amount">' + priceLabel + '</span>' +
-        '</label>'
-      );
-    }).join("");
-
-    Array.prototype.forEach.call(group.querySelectorAll(".price-card"), function(card){
-      card.addEventListener("click", function(){
-        state.priceOptionId = card.dataset.id;
-        Array.prototype.forEach.call(group.querySelectorAll(".price-card"), function(c){
-          c.classList.toggle("checked", c === card);
-          c.querySelector("input").checked = (c === card);
-        });
-        if(state.category === "varejo"){
-          document.getElementById("qty-hint").textContent = "Quantidade por sabor selecionado.";
-        }
-        updateSummary();
-      });
-    });
-
-    if(state.category === "varejo"){
-      document.getElementById("qty-hint").textContent = "Quantidade por sabor selecionado.";
-    }
   }
 
   /* ---------- ENTREGA ---------- */
@@ -738,7 +734,7 @@
     var group = document.getElementById("delivery-group");
     Array.prototype.forEach.call(group.querySelectorAll(".radio-card"), function(card){
       card.addEventListener("click", function(){
-        state.delivery = card.dataset.value;
+        state.entrega.forma = card.dataset.value;
         Array.prototype.forEach.call(group.querySelectorAll(".radio-card"), function(c){
           c.classList.toggle("checked", c === card);
           c.querySelector("input").checked = (c === card);
@@ -748,118 +744,94 @@
     });
   }
 
-  /* ---------- QUANTIDADE ---------- */
-  function setupQuantity(){
-    document.getElementById("qty-minus").addEventListener("click", function(){
-      if(state.quantity > 1){ state.quantity--; refreshQtyDisplay(); updateSummary(); }
-    });
-    document.getElementById("qty-plus").addEventListener("click", function(){
-      state.quantity++; refreshQtyDisplay(); updateSummary();
-    });
-  }
-  function refreshQtyDisplay(){
-    document.getElementById("qty-value").textContent = state.quantity;
-  }
-
   /* ---------- DADOS DO CLIENTE ---------- */
   function setupCustomerFields(){
     var nameInput = document.getElementById("customer-name");
     var addressInput = document.getElementById("customer-address");
     nameInput.addEventListener("input", function(){
-      state.customerName = nameInput.value;
+      state.cliente.nome = nameInput.value;
       updateSummary();
     });
     addressInput.addEventListener("input", function(){
-      state.customerAddress = addressInput.value;
+      state.cliente.endereco = addressInput.value;
       updateSummary();
     });
   }
 
-  /* ---------- RESUMO ---------- */
+  /* ---------- RESUMO (única função, cobre qualquer número de itens) ---------- */
+  function updateMinWarning(){
+    var warning = document.getElementById("min-warning");
+    if(state.tipo === "atacado" && cartTotalPizzas() < ATACADO_MIN_PIZZAS){
+      warning.hidden = false;
+      warning.textContent = "O pedido mínimo para revenda é de " + ATACADO_MIN_PIZZAS + " pizzas no total do carrinho.";
+    } else {
+      warning.hidden = true;
+    }
+  }
+
+  // Gera o bloco "Itens" do resumo — mesma estrutura usada na mensagem do
+  // WhatsApp (sabores + subtotal por item), só que renderizada em HTML.
+  function renderSummaryItems(){
+    var container = document.getElementById("summary-items");
+    var rows = '<div class="summary-row"><span class="label">Itens</span><span class="value"></span></div>';
+    rows += state.items.map(function(item){
+      var size = sizeById(item.tamanho);
+      var chosen = PIZZAS.filter(function(p){ return (item.quantidade[p.name] || 0) > 0; });
+      var flavorsHtml = chosen.length
+        ? chosen.map(function(p){ return "• " + p.name + " ×" + item.quantidade[p.name]; }).join("<br>")
+        : "Nenhum sabor selecionado";
+      return (
+        '<div class="summary-item">' +
+          '<div class="summary-item-title">' + size.title + ' ' + size.sub + '</div>' +
+          '<div class="summary-item-flavors">' + flavorsHtml + '</div>' +
+          '<div class="summary-item-subtotal"><span>Subtotal</span><span>' + formatBRL(itemSubtotal(item)) + '</span></div>' +
+        '</div>'
+      );
+    }).join("");
+    container.innerHTML = rows;
+  }
+
   function updateSummary(){
-    var opt = currentPriceOption();
-    var subtotal = calcSubtotal();
-    var deliveryLabel = state.delivery === "uber" ? "Uber Flash (frete a calcular)"
-                        : state.delivery === "retirada" ? "Retirada na loja"
+    var deliveryLabel = state.entrega.forma === "uber" ? "Uber Flash (frete a calcular)"
+                        : state.entrega.forma === "retirada" ? "Retirada na loja"
                         : "Não selecionada";
 
-    if(state.category === "atacado"){
-      var chosen = PIZZAS.filter(function(p){ return (state.wholesaleQty[p.name] || 0) > 0; });
-
-      document.getElementById("lbl-flavors").textContent = "Sabores escolhidos";
-      document.getElementById("sum-flavors").textContent = chosen.length
-        ? chosen.map(function(p){ return p.name; }).join(", ")
-        : "Nenhum selecionado";
-
-      document.getElementById("lbl-qty").textContent = "Quantidade de cada sabor";
-      document.getElementById("sum-qty").textContent = chosen.length
-        ? chosen.map(function(p){ return p.name + ": " + state.wholesaleQty[p.name]; }).join(", ")
-        : "—";
-
-      document.getElementById("lbl-total-units").textContent = "Total geral";
-      document.getElementById("sum-total-units").textContent = totalPizzas() + " pizza(s)";
-
-      var warning = document.getElementById("atacado-warning");
-      warning.hidden = totalPizzas() >= ATACADO_MIN_PIZZAS;
-    } else {
-      document.getElementById("lbl-flavors").textContent = "Sabores selecionados";
-      document.getElementById("sum-flavors").textContent = state.flavors.length
-        ? state.flavors.join(", ") + " (" + state.flavors.length + ")"
-        : "Nenhum selecionado";
-
-      document.getElementById("lbl-qty").textContent = "Quantidade por sabor";
-      document.getElementById("sum-qty").textContent = state.quantity + " pizza(s)";
-
-      document.getElementById("lbl-total-units").textContent = "Total de pizzas";
-      document.getElementById("sum-total-units").textContent = totalPizzas() + " pizza(s)";
-
-      document.getElementById("atacado-warning").hidden = true;
-    }
-
-    document.getElementById("sum-type").textContent = state.category === "varejo" ? "Varejo" : "Atacado";
-    document.getElementById("sum-unit").textContent = state.category === "atacado"
-      ? formatBRL(opt.price) + " / un."
-      : formatBRL(opt.price);
-    document.getElementById("sum-subtotal").textContent = formatBRL(subtotal);
+    document.getElementById("sum-type").textContent = categoryLabel();
+    renderSummaryItems();
+    document.getElementById("sum-qty").textContent = cartTotalPizzas() + " pizza(s)";
     document.getElementById("sum-delivery").textContent = deliveryLabel;
-    document.getElementById("sum-total").textContent = formatBRL(subtotal);
+    document.getElementById("sum-total").textContent = formatBRL(cartTotal());
 
+    updateMinWarning();
     document.getElementById("btn-finalize").disabled = !isFormValid();
   }
 
-  /* ---------- MENSAGEM WHATSAPP ---------- */
+  /* ---------- MENSAGEM WHATSAPP (única função, cobre qualquer número de itens) ---------- */
   function buildWhatsAppMessage(){
-    var tipo = state.category === "varejo" ? "Varejo" : "Atacado";
-    var sabores, quantidadeTexto;
+    var itemsText = state.items.map(function(item){
+      var size = sizeById(item.tamanho);
+      var chosen = PIZZAS.filter(function(p){ return (item.quantidade[p.name] || 0) > 0; });
+      var flavorsText = chosen.length
+        ? chosen.map(function(p){ return "• " + p.name + " ×" + item.quantidade[p.name]; }).join("\n")
+        : "• (nenhum sabor selecionado)";
+      return "🍕\n" + size.title + " " + size.sub + "\n" + flavorsText +
+        "\nSubtotal:\nR$ " + itemSubtotal(item).toFixed(2).replace(".", ",");
+    }).join("\n\n");
 
-    if(state.category === "atacado"){
-      var chosen = PIZZAS.filter(function(p){ return (state.wholesaleQty[p.name] || 0) > 0; });
-      sabores = chosen.length
-        ? chosen.map(function(p){ return "• " + p.name + ": " + state.wholesaleQty[p.name]; }).join("\n")
-        : "• (nenhum selecionado)";
-      quantidadeTexto = totalPizzas() + " pizzas no total";
-    } else {
-      sabores = state.flavors.length
-        ? state.flavors.map(function(f){ return "• " + f; }).join("\n")
-        : "• (nenhum selecionado)";
-      quantidadeTexto = state.quantity + " unidade(s) por sabor × " + state.flavors.length +
-        " sabor(es) = " + totalPizzas() + " pizzas no total";
-    }
+    var entrega = state.entrega.forma === "uber" ? "Uber Flash"
+                : state.entrega.forma === "retirada" ? "Retirada na loja"
+                : "(não selecionada)";
+    var endereco = state.cliente.endereco.trim() || "(retirada na loja)";
+    var valorTotal = cartTotal().toFixed(2).replace(".", ",");
 
-    var entrega = state.delivery === "uber" ? "Uber Flash" : state.delivery === "retirada" ? "Retirada" : "(não selecionada)";
-    var valor = calcSubtotal().toFixed(2).replace(".", ",");
-    var nome = state.customerName.trim();
-    var endereco = state.customerAddress.trim() || "(retirada na loja)";
-
-    return "Olá! Gostaria de fazer um pedido.\n\n" +
-      "Nome:\n" + nome + "\n\n" +
-      "Endereço:\n" + endereco + "\n\n" +
-      "Tipo:\n" + tipo + "\n\n" +
-      "Sabores:\n" + sabores + "\n\n" +
-      "Quantidade:\n" + quantidadeTexto + "\n\n" +
-      "Forma de entrega:\n" + entrega + "\n\n" +
-      "Valor estimado:\nR$ " + valor + "\n\n" +
-      "Obrigado!";
+    return "Olá!\n\nGostaria de fazer um pedido.\n\n" +
+      "Nome:\n" + state.cliente.nome.trim() + "\n\n" +
+      "Tipo:\n" + categoryLabel() + "\n\n" +
+      "Itens do pedido\n\n" + itemsText + "\n\n" +
+      "Forma de entrega\n" + entrega + "\n\n" +
+      "Endereço\n" + endereco + "\n\n" +
+      "Total de pizzas\n" + cartTotalPizzas() + "\n\n" +
+      "Valor Total\nR$ " + valorTotal;
   }
 
   function setupFinalize(){
@@ -876,15 +848,11 @@
 
   function openDrawer(pizza, category, trigger){
     lastFocusedTrigger = trigger || null;
-    state.pizza = pizza;
-    state.category = category;
-    state.quantity = 1;
-    state.flavors = [];
-    state.wholesaleQty = {};
-    state.customerName = "";
-    state.customerAddress = "";
-    state.delivery = null;
-    state.priceOptionId = PRICE_OPTIONS[category][0].id;
+    state.tipo = category;
+    itemCounter = 0;
+    state.items = [ createItem() ];
+    state.cliente = { nome: "", endereco: "" };
+    state.entrega = { forma: null };
 
     document.getElementById("customer-name").value = "";
     document.getElementById("customer-address").value = "";
@@ -892,21 +860,14 @@
     var img = document.getElementById("drawer-pizza-img");
     img.src = pizzaImages[pizza.name];
     img.alt = "Pizza " + pizza.name;
-    document.getElementById("drawer-pizza-name").textContent = pizza.name;
-    document.getElementById("drawer-pizza-cat").textContent = category === "varejo" ? "Varejo" : "Atacado";
+    document.getElementById("drawer-pizza-cat").textContent = categoryLabel();
 
-    Array.prototype.forEach.call(document.querySelectorAll("#flavor-grid input"), function(cb){
-      cb.checked = false;
-      cb.closest(".flavor-check").classList.remove("checked");
-    });
     Array.prototype.forEach.call(document.querySelectorAll("#delivery-group .radio-card"), function(c){
       c.classList.remove("checked");
       c.querySelector("input").checked = false;
     });
 
-    refreshQtyDisplay();
-    updateCategoryUI();
-    renderPriceOptions();
+    renderItems();
     updateSummary();
 
     var overlay = document.getElementById("drawer-overlay");
@@ -1008,10 +969,9 @@
   document.addEventListener("DOMContentLoaded", function(){
     document.getElementById("footer-year").textContent = new Date().getFullYear();
     renderMenu();
-    renderFlavors();
     setupDelivery();
-    setupQuantity();
-    setupWholesaleFlavors();
+    setupItemsContainer();
+    setupAddItem();
     setupCustomerFields();
     setupFinalize();
     setupDrawerChrome();
