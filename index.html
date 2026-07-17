@@ -53,8 +53,9 @@
   .brand-name{font-weight:800;font-size:21px;color:var(--gold);letter-spacing:.3px;white-space:nowrap}
   .main-nav{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
   .main-nav a{text-decoration:none;font-weight:600;font-size:15px;color:var(--cream)}
-  .btn-pill{background:var(--gold);color:#5A1010;text-decoration:none;font-weight:700;font-size:14px;padding:10px 20px;border-radius:999px;box-shadow:0 3px 0 var(--gold-shadow);border:none;cursor:pointer;display:inline-block}
+  .btn-pill{;background:var(--gold);color:#5A1010;text-decoration:none;font-weight:700;font-size:14px;padding:10px 20px;border-radius:999px;box-shadow:0 3px 0 var(--gold-shadow);border:none;cursor:pointer;display:inline-block}
   .btn-pill:hover{transform:translateY(-1px)}
+  a.btn-pill{display:none;}
 
   /* ============ HERO ============ */
   .hero{position:relative;background:var(--red-dark);padding:56px 6vw;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:48px}
@@ -89,8 +90,8 @@
   /* ============ CARDÁPIO ============ */
   .menu-section{background:var(--red-dark);padding:72px 6vw}
   .section-head{text-align:center;margin-bottom:44px}
-  .section-head .eyebrow{color:var(--red-dark);font-weight:700;letter-spacing:2px;font-size:13px;text-transform:uppercase}
-    .section-head h2{color:var(--red-dark);font-weight:800;font-size:clamp(28px,3.6vw,42px);margin:14px 0 0}
+  .section-head .eyebrow{color:var(--gold);font-weight:700;letter-spacing:2px;font-size:13px;text-transform:uppercase}
+    .section-head h2{color:var(--gold);font-weight:800;font-size:clamp(28px,3.6vw,42px);margin:14px 0 0}
   .menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:24px;max-width:1300px;margin:0 auto}
   .menu-card{background:var(--red-deep);border:1px solid rgba(245,215,122,.25);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
   .menu-card-media{width:100%;aspect-ratio:1/1;background:var(--red-card);overflow:hidden}
@@ -201,6 +202,17 @@
   .btn-finalize:hover{transform:scale(1.02)}
   .btn-finalize:disabled{opacity:.5;cursor:not-allowed;transform:none}
 
+  /* ============ MODAL REVENDEDOR ============ */
+  .revendedor-overlay{position:fixed;inset:0;background:rgba(20,8,8,.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:110}
+  .revendedor-overlay.open{opacity:1;pointer-events:auto}
+  .revendedor-modal{position:fixed;top:50%;left:50%;width:min(480px,92vw);max-height:88vh;background:var(--cream);border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.4);z-index:111;transform:translate(-50%,-50%) scale(.94);opacity:0;pointer-events:none;transition:opacity .25s ease, transform .25s ease;display:flex;flex-direction:column;outline:none}
+  .revendedor-modal.open{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+  .revendedor-modal-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;background:var(--red-dark);color:var(--cream);border-radius:20px 20px 0 0;flex-shrink:0}
+  .revendedor-modal-header h3{font-size:17px;color:var(--gold)}
+  .revendedor-modal-body{padding:20px;overflow-y:auto;flex:1}
+  .revendedor-modal-body p{font-size:13.5px;color:var(--text-body);line-height:1.6;margin-bottom:16px}
+  .revendedor-modal-body .radio-card{margin-bottom:10px}
+
   /* ============ RESPONSIVE — TABLET ============ */
   @media (max-width:1024px){
     .menu-grid{grid-template-columns:repeat(2,1fr)}
@@ -233,6 +245,7 @@
     .footer-top{flex-direction:column;gap:28px}
 
     .drawer{width:100vw}
+    .revendedor-modal{width:94vw;max-height:92vh}
   }
 
   @media (max-width:400px){
@@ -296,7 +309,7 @@
 <section class="menu-section" id="cardapio" data-screen-label="Cardápio">
   <div class="section-head" data-anim="section-title">
     <span class="eyebrow">Cardápio</span>
-    <h2>10 sabores dignos de coroa</h2>
+    <h2>Os melhores sabores:</h2>
   </div>
   <div class="menu-grid" id="menu-grid" data-anim="cards"></div>
 </section>
@@ -356,9 +369,9 @@
 
 <section class="contact-section" id="contato" data-screen-label="Contato" data-anim="section-title">
   <span class="eyebrow">Vamos crescer juntos</span>
-  <h2>Quer revender ou virar sócio do Rei da Pizza?</h2>
-  <p>Fale direto com a gente no WhatsApp: condições especiais para revenda de pizzas e oportunidades de sociedade em novas unidades.</p>
-  <a class="btn-whatsapp" id="btn-revendedor" href="#" target="_blank" rel="noopener">💬 Torne-se um Revendedor</a>
+  <h2>Quer ser um revendedor do Rei da Pizza?</h2>
+  <p>Fale direto com a gente no WhatsApp. Condições especiais para revenda de pizza e oportunidades de parcerias em novas unidades.</p>
+  <button type="button" class="btn-whatsapp" id="btn-revendedor">💬 Torne-se um Revendedor</button>
 </section>
 
 <footer class="site-footer" data-anim="footer">
@@ -456,6 +469,47 @@
   </div>
 </aside>
 
+<!-- MODAL REVENDEDOR -->
+<div class="revendedor-overlay" id="revendedor-overlay"></div>
+<div class="revendedor-modal" id="revendedor-modal" role="dialog" aria-modal="true" aria-labelledby="revendedor-modal-title" tabindex="-1">
+  <div class="revendedor-modal-header">
+    <h3 id="revendedor-modal-title">Torne-se um Revendedor</h3>
+    <button class="drawer-close" id="revendedor-close" aria-label="Fechar formulário">✕</button>
+  </div>
+  <div class="revendedor-modal-body">
+    <p>Preencha os dados abaixo e fale direto com a gente pelo WhatsApp.</p>
+
+    <label class="customer-field-label" for="revendedor-nome">Nome</label>
+    <input class="customer-input" type="text" id="revendedor-nome" placeholder="Digite seu nome">
+
+    <label class="customer-field-label" for="revendedor-ideia">Ideia</label>
+    <textarea class="customer-input customer-textarea" id="revendedor-ideia" placeholder="Conte um pouco da sua ideia" rows="3"></textarea>
+
+    <label class="customer-field-label" for="revendedor-bairro">Pretende vender em qual bairro?</label>
+    <input class="customer-input" type="text" id="revendedor-bairro" placeholder="Digite o bairro">
+
+    <label class="customer-field-label">Você já tem um comércio?</label>
+    <div id="revendedor-comercio-group" role="radiogroup" aria-label="Você já tem um comércio?">
+      <label class="radio-card" data-value="sim">
+        <input type="radio" name="revendedor-comercio" value="sim">
+        <span><span class="radio-title">Sim</span></span>
+      </label>
+      <label class="radio-card" data-value="nao">
+        <input type="radio" name="revendedor-comercio" value="nao">
+        <span><span class="radio-title">Não</span></span>
+      </label>
+    </div>
+
+    <div id="revendedor-instagram-field" hidden>
+      <label class="customer-field-label" for="revendedor-instagram">Se sim, qual o @ do Instagram?</label>
+      <input class="customer-input" type="text" id="revendedor-instagram" placeholder="@seuinstagram">
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn-finalize" id="revendedor-submit" type="button">Enviar pelo WhatsApp</button>
+  </div>
+</div>
+
 <script>
 (function(){
   "use strict";
@@ -492,14 +546,24 @@
     { name:"Chocolate", desc:"Chocolate ao leite derretido com granulado crocante." }
   ];
 
-  // Tamanhos disponíveis — fonte única de preço, usada por qualquer bloco
-  // do carrinho, em qualquer tipo de pedido (Quero Saborear / Quero Revender).
+  // Tamanhos disponíveis — título e medida são os mesmos nos dois tipos de
+  // pedido; o preço, porém, é diferente entre Varejo (Quero Saborear) e
+  // Revenda (Quero Revender), então fica numa tabela própria (SIZE_PRICES),
+  // única fonte de preço usada por qualquer bloco do carrinho.
   var SIZES = [
-    { id:"familia", title:"Família", sub:"30 cm", price:13.99 },
-    { id:"brotinho", title:"Brotinho", sub:"20 cm", price:7.0 }
+    { id:"familia", title:"Família", sub:"30 cm" },
+    { id:"brotinho", title:"Brotinho", sub:"20 cm" }
   ];
+  var SIZE_PRICES = {
+    varejo:  { familia: 14, brotinho: 7 },
+    atacado: { familia: 12, brotinho: 5.5 }
+  };
   function sizeById(id){
     return SIZES.filter(function(s){ return s.id === id; })[0] || SIZES[0];
+  }
+  // Preço de um tamanho, de acordo com o tipo de pedido atual (state.tipo).
+  function sizePrice(sizeId){
+    return SIZE_PRICES[state.tipo][sizeId];
   }
 
   // Rótulos de exibição para cada tipo de pedido.
@@ -548,9 +612,9 @@
     PIZZAS.forEach(function(p){ sum += (item.quantidade[p.name] || 0); });
     return sum;
   }
-  // Subtotal de UM item: preço do tamanho × total de pizzas do item.
+  // Subtotal de UM item: preço do tamanho (no tipo de pedido atual) × total de pizzas do item.
   function itemSubtotal(item){
-    return sizeById(item.tamanho).price * itemTotalPizzas(item);
+    return sizePrice(item.tamanho) * itemTotalPizzas(item);
   }
   // Total de pizzas do carrinho inteiro — única função usada em resumo e WhatsApp.
   function cartTotalPizzas(){
@@ -644,7 +708,7 @@
               '<span class="price-card-sub">' + s.sub + '</span>' +
             '</span>' +
           '</span>' +
-          '<span class="price-card-amount">' + formatBRL(s.price) + ' / un.</span>' +
+          '<span class="price-card-amount">' + formatBRL(sizePrice(s.id)) + ' / un.</span>' +
         '</label>'
       );
     }).join("");
@@ -926,11 +990,119 @@
     document.getElementById("drawer-overlay").addEventListener("click", closeDrawer);
   }
 
-  /* ---------- REVENDEDOR ---------- */
+  /* ---------- MODAL REVENDEDOR ---------- */
+  var revendedorLastFocusedTrigger = null;
+  var revendedorFocusableSelector = 'a[href], button:not([disabled]), input, textarea, [tabindex]:not([tabindex="-1"])';
+
+  function openRevendedorModal(trigger){
+    revendedorLastFocusedTrigger = trigger || null;
+
+    document.getElementById("revendedor-nome").value = "";
+    document.getElementById("revendedor-ideia").value = "";
+    document.getElementById("revendedor-bairro").value = "";
+    document.getElementById("revendedor-instagram").value = "";
+    document.getElementById("revendedor-instagram-field").hidden = true;
+    Array.prototype.forEach.call(document.querySelectorAll("#revendedor-comercio-group .radio-card"), function(c){
+      c.classList.remove("checked");
+      c.querySelector("input").checked = false;
+    });
+
+    var overlay = document.getElementById("revendedor-overlay");
+    var modal = document.getElementById("revendedor-modal");
+    overlay.classList.add("open");
+    modal.classList.add("open");
+
+    if(window.gsap){
+      gsap.fromTo(modal, { scale: 0.94, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "power3.out" });
+    }
+
+    document.body.style.overflow = "hidden";
+    modal.focus();
+    document.addEventListener("keydown", onRevendedorModalKeydown);
+  }
+
+  function closeRevendedorModal(){
+    var overlay = document.getElementById("revendedor-overlay");
+    var modal = document.getElementById("revendedor-modal");
+
+    function finishClose(){
+      overlay.classList.remove("open");
+      modal.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    if(window.gsap){
+      gsap.to(modal, { scale: 0.94, opacity: 0, duration: 0.25, ease: "power2.in", onComplete: finishClose });
+    } else {
+      finishClose();
+    }
+
+    document.removeEventListener("keydown", onRevendedorModalKeydown);
+    if(revendedorLastFocusedTrigger) revendedorLastFocusedTrigger.focus();
+  }
+
+  function onRevendedorModalKeydown(e){
+    var modal = document.getElementById("revendedor-modal");
+    if(e.key === "Escape"){
+      closeRevendedorModal();
+      return;
+    }
+    if(e.key === "Tab"){
+      var focusables = Array.prototype.slice.call(modal.querySelectorAll(revendedorFocusableSelector))
+        .filter(function(el){ return el.offsetParent !== null; });
+      if(focusables.length === 0) return;
+      var first = focusables[0];
+      var last = focusables[focusables.length - 1];
+      if(e.shiftKey && document.activeElement === first){
+        e.preventDefault(); last.focus();
+      } else if(!e.shiftKey && document.activeElement === last){
+        e.preventDefault(); first.focus();
+      }
+    }
+  }
+
+  function buildRevendedorMessage(){
+    var nome = document.getElementById("revendedor-nome").value.trim();
+    var ideia = document.getElementById("revendedor-ideia").value.trim();
+    var bairro = document.getElementById("revendedor-bairro").value.trim();
+    var comercioInput = document.querySelector("#revendedor-comercio-group input:checked");
+    var comercio = comercioInput ? comercioInput.value : "";
+    var comercioLabel = comercio === "sim" ? "Sim" : comercio === "nao" ? "Não" : "(não informado)";
+    var instagram = document.getElementById("revendedor-instagram").value.trim();
+
+    return "Olá, tenho interesse em ser um revendedor do Rei da Pizza.\n\n" +
+      "Nome:\n" + (nome || "(não informado)") + "\n\n" +
+      "Ideia:\n" + (ideia || "(não informado)") + "\n\n" +
+      "Pretende vender em qual bairro:\n" + (bairro || "(não informado)") + "\n\n" +
+      "Já possui comércio:\n" + comercioLabel + "\n\n" +
+      "Instagram:\n" + (instagram || "(não informado)");
+  }
+
   function setupRevendedor(){
-    var msg = "Olá!\nTenho interesse em me tornar um revendedor das pizzas.\nGostaria de receber mais informações sobre preços, condições e como funciona a parceria.";
-    var link = document.getElementById("btn-revendedor");
-    link.href = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(msg);
+    var openBtn = document.getElementById("btn-revendedor");
+    openBtn.addEventListener("click", function(){
+      openRevendedorModal(openBtn);
+    });
+
+    document.getElementById("revendedor-close").addEventListener("click", closeRevendedorModal);
+    document.getElementById("revendedor-overlay").addEventListener("click", closeRevendedorModal);
+
+    Array.prototype.forEach.call(document.querySelectorAll("#revendedor-comercio-group .radio-card"), function(card){
+      card.addEventListener("click", function(){
+        Array.prototype.forEach.call(document.querySelectorAll("#revendedor-comercio-group .radio-card"), function(c){
+          c.classList.toggle("checked", c === card);
+          c.querySelector("input").checked = (c === card);
+        });
+        document.getElementById("revendedor-instagram-field").hidden = (card.dataset.value !== "sim");
+      });
+    });
+
+    document.getElementById("revendedor-submit").addEventListener("click", function(){
+      var message = buildRevendedorMessage();
+      var url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message);
+      window.open(url, "_blank", "noopener");
+      closeRevendedorModal();
+    });
   }
 
   /* ---------- ANIMAÇÕES GSAP ---------- */
